@@ -24,7 +24,7 @@ namespace WhatSAP.Controllers
         [Route("")]
         public IActionResult Index(int page = 0, string sortBy = "")
         {
-            var pageSize = 2;
+            var pageSize = 3;
             var totalActivities = _context.Activity.Count();
             var totalPages = totalActivities / pageSize;
             var previousPage = page - 1;
@@ -35,8 +35,10 @@ namespace WhatSAP.Controllers
             ViewBag.NextPage = nextPage;
             ViewBag.HasNextPage = nextPage <= totalPages;
 
-            var activity = from ac in _context.Activity
-                           select ac;
+            //var activity = from ac in _context.Activity
+            //               select ac;
+
+            IEnumerable<Activity> activity = _context.Activity;
 
             switch (sortBy)
             {
@@ -59,14 +61,14 @@ namespace WhatSAP.Controllers
                     activity = activity.OrderBy(x => x.Rate);
                     break;
                 default:
-                    activity = activity.OrderBy(x => x.Rate);
+                    activity = activity.OrderByDescending(x => x.Rate);
                     break;
             }
 
-            activity.Skip(pageSize * page).Take(pageSize).ToArray();
-            return View(activity);
+            var result = activity.Skip(pageSize * page).Take(pageSize).ToArray();
+            return View(result);
         }
-
+        
         // GET: Activity/Details/5
         [Route("{id}")]
         public async Task<IActionResult> Details(long id)
