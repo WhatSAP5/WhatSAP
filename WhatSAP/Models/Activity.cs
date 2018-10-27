@@ -20,5 +20,10 @@ namespace WhatSAP.Models
         public Address Address { get; set; }
         public Category Category { get; set; }
         public Client Client { get; set; }
+
+        public void SortBy(string sortBy)
+        {
+
+        }
     }
 }
