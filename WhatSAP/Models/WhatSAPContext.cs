@@ -161,6 +161,7 @@ namespace WhatSAP.Models
 
             modelBuilder.Entity<Customer>(entity =>
             {
+
                 entity.Property(e => e.Email)
                     .IsRequired()
                     .HasMaxLength(128);
@@ -176,6 +177,7 @@ namespace WhatSAP.Models
                 entity.Property(e => e.Password)
                     .IsRequired()
                     .HasMaxLength(200);
+
             });
         }
     }
