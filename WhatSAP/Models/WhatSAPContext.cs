@@ -161,7 +161,6 @@ namespace WhatSAP.Models
 
             modelBuilder.Entity<Customer>(entity =>
             {
-                entity.Property(e => e.DateOfBirth).HasColumnType("datetime");
 
                 entity.Property(e => e.Email)
                     .IsRequired()
@@ -179,7 +178,6 @@ namespace WhatSAP.Models
                     .IsRequired()
                     .HasMaxLength(200);
 
-                entity.Property(e => e.Phone).IsRequired();
             });
         }
     }
