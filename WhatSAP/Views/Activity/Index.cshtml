@@ -1,0 +1,107 @@
+﻿@model IEnumerable<WhatSAP.Models.Activity>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+@*Nav tab Bar*@
+<ul class="nav nav-pills" style="width:100%; padding:10px;">
+    <li class="nav-item disabled">
+        <a class="nav-link" href="#">Activity List</a>
+    </li>
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Sort by</a>
+        <div class="dropdown-menu">
+            <a class="dropdown-item" href="@Url.Action("Index", "Activity", new { sortBy = "Name" })">Name</a>
+            <a class="dropdown-item" href="@Url.Action("Index", "Activity", new { sortBy = "Date" })">Date</a>
+            <a class="dropdown-item" href="@Url.Action("Index", "Activity", new { sortBy = "Price" })">Price <img src="~/images/icons/arrow-up.svg" /></a>
+            <a class="dropdown-item" href="@Url.Action("Index", "Activity", new { sortBy = "PriceLow" })">Price <img src="~/images/icons/arrow-down.svg" /></a>
+            <a class="dropdown-item" href="@Url.Action("Index", "Activity", new { sortBy = "Rate" })">Rate <img src="~/images/icons/arrow-up.svg" /></a>
+            <a class="dropdown-item" href="@Url.Action("Index", "Activity", new { sortBy = "RateLow" })">Rate <img src="~/images/icons/arrow-down.svg" /></a>
+        </div>
+    </li>
+</ul>
+
+@if (User.Identity.IsAuthenticated)
+{
+    <p>
+        <a asp-action="Create">Create New Activity</a>
+    </p>
+}
+
+
+<div class="row">
+    @for (int i = 0; i < Model.Count(); i++)
+    {
+        if (i > 0 && i % 3 == 0)
+        {
+        @:</div><div class="row">
+            <br />
+        }
+
+        <div class="col-sm-4">
+            <div class="card">
+                <img class="card-img-top" src="~/images/activities/@(Model.ElementAt(i).Key).jpg" alt="@Model.ElementAt(i).ActivityName" style="height:200px" />
+                <div class="card-body" style="height: 250px">
+                    <h5 class="card-title">@Model.ElementAt(i).ActivityName</h5>
+                    <span class="badge badge-primary">@Model.ElementAt(i).Category</span>
+                    <p class="card-text">
+                        @Model.ElementAt(i).Description <br />
+                        Price: $@Model.ElementAt(i).Price per person
+                    </p>
+                    <a class="btn btn-primary" href="@Url.Action("Details", "Action")">
+                        See Details
+                        @*TODO: Should be replaced! Calling Details method in Activity Controller by passing the activity ID*@
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@*Pagination*@
+<p class="pager">
+    <ul class="pagination">
+        @if (ViewBag.HasPreviousPage)
+        {
+            <li class="page-item">
+                <a class="page-link" href="@Url.Action("Index", "Activity", new { page = ViewBag.PreviousPage })">&laquo;</a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <a class="page-link" href="#">&laquo;</a>
+            </li>
+        }
+
+        @for (int i = ViewBag.PreviousPage + 1; i <= Model.Count(); i++)
+        {
+            if (i == ViewBag.PreviousPage + 1)
+            {
+                if (i > 0)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="#">@i</a>
+                    </li>
+                }
+
+                <li class="page-item active">
+                    <a class="page-link" href="@Url.Action("Index", "Activity", new { page = i })">@(i + 1)</a>
+                </li>
+
+                if (i < Model.Count())
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="#">@(i + 2)</a>
+                    </li>
+                }
+
+            }
+        }
+
+        <li class="page-item">
+            <a class="page-link" href="@Url.Action("Index", "Activity" , new { page=ViewBag.NextPage })">&raquo;</a>
+        </li>
+    </ul>
+</p>
