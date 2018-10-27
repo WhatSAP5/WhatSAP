@@ -22,9 +22,9 @@ namespace WhatSAP.Controllers
 
         // GET: Activity
         [Route("")]
-        public IActionResult Index(int page = 0)
+        public IActionResult Index(int page = 0, string sortBy = "")
         {
-            var pageSize = 2;
+            var pageSize = 3;
             var totalActivities = _context.Activity.Count();
             var totalPages = totalActivities / pageSize;
             var previousPage = page - 1;
@@ -35,16 +35,40 @@ namespace WhatSAP.Controllers
             ViewBag.NextPage = nextPage;
             ViewBag.HasNextPage = nextPage <= totalPages;
 
-            var activity = _context.Activity.OrderBy(x => x.Rate).Skip(pageSize * page).Take(pageSize).ToArray();
+            //var activity = from ac in _context.Activity
+            //               select ac;
 
-            //var activity = _context.Activity.ToArray();
+            IEnumerable<Activity> activity = _context.Activity;
 
-            return View(activity);
+            switch (sortBy)
+            {
+                case "Name":
+                    activity = activity.OrderBy(x => x.ActivityName);
+                    break;
+                case "Date":
+                    activity = activity.OrderBy(x => x.ActivityDate);
+                    break;
+                case "Price":
+                    activity = activity.OrderByDescending(x => x.Price);
+                    break;
+                case "PriceLow":
+                    activity = activity.OrderBy(x => x.Price);
+                    break;
+                case "Rate":
+                    activity = activity.OrderByDescending(x => x.Rate);
+                    break;
+                case "RateLow":
+                    activity = activity.OrderBy(x => x.Rate);
+                    break;
+                default:
+                    activity = activity.OrderByDescending(x => x.Rate);
+                    break;
+            }
 
-            //var whatSAPContext = _context.Activity.Include(a => a.Address).Include(a => a.Client);
-            //return View(await whatSAPContext.ToListAsync());
+            var result = activity.Skip(pageSize * page).Take(pageSize).ToArray();
+            return View(result);
         }
-
+        
         // GET: Activity/Details/5
         [Route("{id}")]
         public async Task<IActionResult> Details(long id)
@@ -203,15 +227,6 @@ namespace WhatSAP.Controllers
 
             var result = _context.Activity.Where(x => x.ActivityName.Contains(keyword)).ToArray();
             return View(result);
-        }
-
-        //Sort by Name
-        [HttpGet, Route("sort")]
-        public IActionResult SortByName()
-        {
-            var result = _context.Activity.OrderBy(x => x.ActivityName);
-
-            return RedirectToAction("Index", "Activity", result);
         }
 
         //Search by Price
