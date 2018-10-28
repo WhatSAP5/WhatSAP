@@ -33,7 +33,7 @@ namespace WhatSAP.Controllers
         //POST /Accounts/login
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login([Bind("Email, Password, UserType")]LoginViewModel loginViewModel)
+        public IActionResult Login([Bind("Email, Password, UserType")]LoginViewModel loginViewModel)
         {
             if (ModelState.IsValid)
             {

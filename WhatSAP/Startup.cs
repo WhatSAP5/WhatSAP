@@ -59,11 +59,12 @@ namespace WhatSAP
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
-            app.UseSession();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
-            app.UseAuthentication();
+            //app.UseAuthentication();
+            app.UseSession();
+
 
             app.UseMvc(routes =>
             {
