@@ -90,13 +90,12 @@
                     <a class="page-link" href="@Url.Action("Index", "Activity", new { page = i })">@(i + 1)</a>
                 </li>
 
-                if (i < Model.Count())
+                if (i < Model.Count() - 3 )
                 {
                     <li class="page-item">
                         <a class="page-link" href="#">@(i + 2)</a>
                     </li>
                 }
-
             }
         }
 
