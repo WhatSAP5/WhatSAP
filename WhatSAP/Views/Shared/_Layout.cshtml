@@ -29,20 +29,6 @@
                 <li class="nav-item active"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
                 <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="About">About</a></li>
 
-                @*TODO: Client Entrance*@
-                @if (User.Identity.IsAuthenticated)
-                {
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="true">Client</a>
-                        <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 40px, 0px); top: 0px; left: 0px; will-change: transform;">
-                            <a class="dropdown-item" asp-area="" asp-controller="Client" asp-action="Request">Request to Add Activity</a>
-                            <a class="dropdown-item" asp-area="" asp-controller="Client" asp-action="List">Booking List</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Separated link</a>
-                        </div>
-                    </li>
-                }
-
                 @*Activity Menu*@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="true">Activities</a>
@@ -54,27 +40,40 @@
                         <a class="dropdown-item" href="#">Separated link</a>
                     </div>
                 </li>
+
+                @*TODO: Client Entrance*@
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="true">Client</a>
+                    <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 40px, 0px); top: 0px; left: 0px; will-change: transform;">
+                        <a class="dropdown-item" asp-area="" asp-controller="Client" asp-action="Request">Request to Add Activity</a>
+                        <a class="dropdown-item" asp-area="" asp-controller="Client" asp-action="List">Booking List</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Separated link</a>
+                    </div>
+                </li>
                 <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
+
             </ul>
 
+
             <ul class="navbar-nav navbar-right">
-                @if (User.Identity.IsAuthenticated)
-                {
                     <li class="nav-item">
-                        <form id="logout" action="@Url.Action("Logout", "Account")" method="POST">
+                        <form id="logout" action="@Url.Action("Logout", "Accounts")" method="POST">
                             <a class="nav-link active" href="javascript: $('#logout').submit()" title="Log out">
                                 Log Out <br />
                                 <span class="tagline">@User.Identity.Name</span>
                             </a>
                         </form>
                     </li>
-                }
-                else
-                {
+
                     <li class="nav-item">
-                        <a class="nav-link active" href="@Url.Action("Login", "Account")" title="Log in">Log In</a>
+                        <a class="nav-link active" href="@Url.Action("Login", "Accounts")" title="Log in">Log In</a>
                     </li>
-                }
+                    <li class="nav-item">
+                        <a class="nav-link active" href="@Url.Action("Register", "Accounts")" title="Register">Register</a>
+                    </li>
+
             </ul>
         </div>
     </nav>
