@@ -2,33 +2,69 @@
 @{
     ViewData["Title"] = "Login";
 }
+<div class="container" style="margin:auto; padding-top:20px">
+    <img class="rounded mx-auto d-block" src="~/images/logo.png" alt="" width="160" height="160"><br/>
+    <h2 class="text-center">Please sign in</h2>
+    <br />
 
-<h2>Login</h2>
-<br/>
-<div>
+    <div >
+        <form asp-action="Login" class="form-signin">
+            <div class="text-center">
+                <input type="radio" asp-for="UserType" value="Client" /> Client
+                <input type="radio" asp-for="UserType" value="Customer" /> Customer
+            </div>
+            <br/>
+            <div class="form-group">
+                <input asp-for="Email" type="email" class="form-control" placeholder="Email address" />
+            </div>
+            <div class="form-group">
+                <input type="password" asp-for="Password" class="form-control" placeholder="Password" />
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary btn-lg btn-block">Login</button>
+            </div>
+            <div class="form-group">
+                <button asp-action="Register" asp-controller="Accounts" class="btn btn-primary btn-lg btn-block">Register</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@*<div>
     <form asp-action="Login">
         <div class="row">
-        <div class="col-md-4">
-            <div asp-validation-summary="All">    </div>
-            <div class="form-group">
-                <label asp-for="Email"></label>
-                <input asp-for="Email" type="email" class="form-control"/>
-                <span asp-validation-for="Email" class="text-danger"></span>
+            <div class="col-md-4">
+                <div asp-validation-summary="All">    </div>
+
+                <div class="form-group">
+                    <label asp-for="UserType" class="control-label">User type</label><br/>
+
+                    <input type="radio" asp-for="UserType" value="Client" /> Client
+
+                    <select asp-for="UserType" class="form-control">
+                        <option>Client</option>
+                        <option>Customer</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Email"></label>
+                    <input asp-for="Email" type="email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Password"></label>
+                    <input type="password" asp-for="Password" class="form-control" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <div>
+                    <label>&nbsp;</label>
+                    <button type="submit" class="btn btn-primary">Login</button>
+                    <button class="btn btn-primary">Register</button>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Password"></label>
-                <input type="password" asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-            <div>
-                <label>&nbsp;</label>
-                <button type="submit" class="btn btn-primary">Login</button>
-                <button class="btn btn-primary">Register</button>
-            </div>
-        </div>
         </div>
     </form>
-</div>
+</div>*@
 @section Scripts {
     @await Html.PartialAsync("_ValidationScriptsPartial")
 }
