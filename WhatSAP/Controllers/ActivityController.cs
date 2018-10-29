@@ -215,6 +215,13 @@ namespace WhatSAP.Controllers
         }
         */
 
+        [Route("search")]
+        public IActionResult Search()
+        {
+            return View();
+        }
+
+
         //Search by Title
         // SEARCH: Activity/Search/{keyworkd}
         [HttpPost, Route("search/{keyword}")]
