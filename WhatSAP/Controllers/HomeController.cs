@@ -10,9 +10,15 @@ namespace WhatSAP.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly WhatSAPContext _context;
+        public HomeController(WhatSAPContext context)
+        {
+            _context = context;
+        }
         public IActionResult Index()
         {
-            return View();
+            var categories = _context.Category.ToArray();
+            return View(categories);
         }
 
         public IActionResult About()
@@ -37,7 +43,7 @@ namespace WhatSAP.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View(new ErrorViewModel { RequestId = System.Diagnostics.Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }
