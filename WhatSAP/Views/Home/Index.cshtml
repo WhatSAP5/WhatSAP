@@ -18,7 +18,7 @@
             <div class="carousel-caption d-none d-md-block" role="option">
                 <p>
                     Centennial College Weekly Book Club <br />
-                    <a class="btn btn-primary" href="https://go.microsoft.com/fwlink/?LinkID=525028&clcid=0x409">
+                    <a class="btn btn-primary" href="@Url.Action("Details", "Activity")" title="See Details">
                         See Details
                         @*TODO: Should be replaced! Calling Details method in Activity Controller by passing the activity ID*@
                     </a>
@@ -82,7 +82,7 @@
                 <div class="card-body">
                     <h5 class="card-title">Book Club</h5>
                     <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                    <a class="btn btn-primary" href="https://go.microsoft.com/fwlink/?LinkID=525028&clcid=0x409">
+                    <a class="btn btn-primary" href="@Url.Action("Details", "Activity")" title="See Details">
                         See Details
                         @*TODO: Should be replaced! Calling Details method in Activity Controller by passing the activity ID*@
                     </a>
@@ -96,7 +96,7 @@
                     <h5 class="card-title">Aquarium Tour</h5>
                     @*TODO: Link to Activity Details*@
                     <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                    <a class="btn btn-primary" href="https://go.microsoft.com/fwlink/?LinkID=525028&clcid=0x409">
+                    <a class="btn btn-primary" href="@Url.Action("Details", "Activity")" title="See Details">
                         See Details
                     </a>
                 </div>
@@ -107,7 +107,7 @@
     <div class="row">
         <ul>
             <li>Centennial College Book Club</li>
-            <li>Theming using <a href="https://go.microsoft.com/fwlink/?LinkID=398939">Bootstrap</a></li>
+            <li>Theming using <a href="@Url.Action("Details", "Activity")" title="See Details">Bootstrap</a></li>
         </ul>
     </div>
 
