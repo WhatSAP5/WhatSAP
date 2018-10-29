@@ -68,6 +68,12 @@ namespace WhatSAP.Controllers
             var result = activity.Skip(pageSize * page).Take(pageSize).ToArray();
             return View(result);
         }
+
+        [Route("details/")]
+        public IActionResult Details()
+        {
+            return View();
+        }
         
         // GET: Activity/Details/5
         [Route("{id}")]
