@@ -53,14 +53,8 @@
                 @*TODO: Client Entrance*@
                 @if (user != null && userType.Equals("Client"))
                 {
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="true">Client</a>
-                        <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 40px, 0px); top: 0px; left: 0px; will-change: transform;">
-                            <a class="dropdown-item" asp-area="" asp-controller="Client" asp-action="Request">Request to Add Activity</a>
-                            <a class="dropdown-item" asp-area="" asp-controller="Client" asp-action="List">Booking List</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Separated link</a>
-                        </div>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Client" asp-action="Index">Clients</a>
                     </li>
                 }
 
