@@ -1,4 +1,4 @@
-﻿
+﻿@model WhatSAP.Models.Activity
 @{
     ViewData["Title"] = "Details";
 }
@@ -17,27 +17,36 @@
 
             <tr>
                 <th scope="row" rowspan="2">
-                    <img style="height: 200px; width: 300px; display: block;" src="" alt="Card image">
+                    <img style="height: 200px; width: 300px; display: block;" src="~/images/activities/@(Model.Key).jpg" alt="Card image">
                 </th>
-                <td><h2>CLass Name Here</h2></td>
-             </tr>
+                <td><h2>@Model.ActivityName</h2></td>
+            </tr>
 
-             <tr>
+            <tr>
                 <td><button type="button" class="btn btn-primary btn-lg">SAVE</button></td>
                 <td><button type="button" class="btn btn-secondary btn-lg">PAY</button></td>
-             </tr>
-            
+            </tr>
+
         </tbody>
     </table>
 
-    <p class="lead">Activity Date Here</p>
-    <p class="lead">Activity Capacity</p>
+    <p class="lead">
+        Activity Date: <br />
+        @Model.ActivityDate
+    </p>
+    <p class="lead">
+        Activity Capacity:  <br />
+        @Model.Capacity
+    </p>
 
 
 
     <hr class="my-4">
     <h4>Activity Detail</h4>
-    <p>Activity Detail Here Activity Detail Here Activity Detail Here Activity Detail Here Activity Detail Here </p>
+    <p>
+        @Model.Description
+        Activity Detail Here Activity Detail Here Activity Detail Here Activity Detail Here Activity Detail Here
+    </p>
 
     <p>
         @*Google Map*@

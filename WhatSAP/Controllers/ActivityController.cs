@@ -76,13 +76,10 @@ namespace WhatSAP.Controllers
         }
         
         // GET: Activity/Details/5
-        [Route("{id}")]
-        public async Task<IActionResult> Details(long id)
+        [Route("details/{id}")]
+        public IActionResult Details(long id)
         {
-            var activity = await _context.Activity
-                .Include(a => a.Address)
-                .Include(a => a.Client)
-                .SingleOrDefaultAsync(m => m.ActivityId == id);
+            var activity = _context.Activity.FirstOrDefault(x => x.ActivityId == id);
 
             if (activity == null)
             {
