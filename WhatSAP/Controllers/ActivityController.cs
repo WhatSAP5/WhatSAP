@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WhatSAP.Models;
 
+
 namespace WhatSAP.Controllers
 {
     [Route("activity")]
