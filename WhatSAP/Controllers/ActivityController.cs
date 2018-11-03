@@ -67,6 +67,7 @@ namespace WhatSAP.Controllers
             }
 
             var result = activity.Skip(pageSize * page).Take(pageSize).ToArray();
+
             return View(result);
         }
 
@@ -223,9 +224,45 @@ namespace WhatSAP.Controllers
         */
 
         [Route("search")]
-        public IActionResult Search()
+        public IActionResult Search(string sortBy = "")
         {
-            return View();
+            
+            var totalActivities = _context.Activity.Count();
+            var totalPages = totalActivities;
+           
+            //var activity = from ac in _context.Activity
+            //               select ac;
+
+            IEnumerable<Activity> activity = _context.Activity;
+
+            switch (sortBy)
+            {
+                case "Name":
+                    activity = activity.OrderBy(x => x.ActivityName);
+                    break;
+                case "Date":
+                    activity = activity.OrderBy(x => x.ActivityDate);
+                    break;
+                case "Price":
+                    activity = activity.OrderByDescending(x => x.Price);
+                    break;
+                case "PriceLow":
+                    activity = activity.OrderBy(x => x.Price);
+                    break;
+                case "Rate":
+                    activity = activity.OrderByDescending(x => x.Rate);
+                    break;
+                case "RateLow":
+                    activity = activity.OrderBy(x => x.Rate);
+                    break;
+                default:
+                    activity = activity.OrderByDescending(x => x.Rate);
+                    break;
+            }
+
+            var result = activity.ToArray();
+            return View(result);
+
         }
 
 
