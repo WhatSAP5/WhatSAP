@@ -29,7 +29,6 @@
     </p>
 }
 
-
 <div class="row">
     @for (int i = 0; i < Model.Count(); i++)
     {
@@ -60,7 +59,6 @@
                         </p>
                     }
 
-
                     <a class="btn btn-primary" href="@Url.Action("Details", "Activity", new { id = Model.ElementAt(i).ActivityId })">
                         See Details
                         @*TODO: Should be replaced! Calling Details method in Activity Controller by passing the activity ID*@
@@ -89,7 +87,7 @@
 
         @for (int i = ViewBag.CurrentPage; i <= ViewBag.TotalPage; i++)
         {
-            if (i == ViewBag.CurrentPage || i == 1 || i == ViewBag.CurrentPage - 1 || i == ViewBag.CurrentPage - 2 || i == ViewBag.CurrentPage + 2 || i == ViewBag.CurrentPage + 1 || i == ViewBag.TotalPage)
+            if (i == ViewBag.CurrentPage || i == 1 || i == ViewBag.CurrentPage - 1 || i == ViewBag.CurrentPage - 2 || i == ViewBag.CurrentPage +2 || i == ViewBag.CurrentPage + 1 || i == ViewBag.TotalPage)
             {
                 <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
                     <a class="page-link" href="@Url.Action("Index", "Activity", new { page = i })">@i</a>
