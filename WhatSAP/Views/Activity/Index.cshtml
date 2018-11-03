@@ -45,10 +45,22 @@
                 <div class="card-body" style="height: 250px">
                     <h5 class="card-title">@Model.ElementAt(i).ActivityName</h5>
                     <span class="badge badge-primary">@Model.ElementAt(i).Category</span>
-                    <p class="card-text">
-                        @Model.ElementAt(i).Description <br />
-                        Price: $@Model.ElementAt(i).Price per person
-                    </p>
+
+                    @if (@Model.ElementAt(i).Description.Count() <= 100)
+                    {
+                        <p class="card-text">
+                            @Model.ElementAt(i).Description <br />
+                            Price: $@Model.ElementAt(i).Price per person
+                        </p>
+                    } else
+                    {
+                        <p class="card-text">
+                            @Model.ElementAt(i).Description.Substring(0, 100)...  <br />
+                            Price: $@Model.ElementAt(i).Price per person
+                        </p>
+                    }
+
+
                     <a class="btn btn-primary" href="@Url.Action("Details", "Activity", new { id = Model.ElementAt(i).ActivityId })">
                         See Details
                         @*TODO: Should be replaced! Calling Details method in Activity Controller by passing the activity ID*@
@@ -77,7 +89,7 @@
 
         @for (int i = ViewBag.CurrentPage; i <= ViewBag.TotalPage; i++)
         {
-            if (i == ViewBag.CurrentPage || i == 1 || i == ViewBag.CurrentPage - 1 || i == ViewBag.CurrentPage - 2 || i == ViewBag.CurrentPage +2 || i == ViewBag.CurrentPage + 1 || i == ViewBag.TotalPage)
+            if (i == ViewBag.CurrentPage || i == 1 || i == ViewBag.CurrentPage - 1 || i == ViewBag.CurrentPage - 2 || i == ViewBag.CurrentPage + 2 || i == ViewBag.CurrentPage + 1 || i == ViewBag.TotalPage)
             {
                 <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
                     <a class="page-link" href="@Url.Action("Index", "Activity", new { page = i })">@i</a>
