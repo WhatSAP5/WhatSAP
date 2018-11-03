@@ -22,18 +22,23 @@ namespace WhatSAP.Controllers
 
         // GET: Activity
         [Route("")]
-        public IActionResult Index(int page = 0, string sortBy = "")
+        public IActionResult Index(int page = 1, string sortBy = "")
         {
             var pageSize = 3;
             var totalActivities = _context.Activity.Count();
             var totalPages = totalActivities / pageSize;
             var previousPage = page - 1;
+            var currentPage = page;
             var nextPage = page + 1;
 
+            ViewBag.CurrentPage = currentPage;
+            ViewBag.TotalPage = totalPages;
             ViewBag.PreviousPage = previousPage;
-            ViewBag.HasPreviousPage = previousPage >= 0;
+            ViewBag.HasPreviousPage = previousPage > 0;
             ViewBag.NextPage = nextPage;
             ViewBag.HasNextPage = nextPage <= totalPages;
+            ViewBag.PreviousPageIsEllipsis = false;
+
 
             //var activity = from ac in _context.Activity
             //               select ac;
@@ -65,7 +70,7 @@ namespace WhatSAP.Controllers
                     break;
             }
 
-            var result = activity.Skip(pageSize * page).Take(pageSize).ToArray();
+            var result = activity.Skip(pageSize * (page - 1)).Take(pageSize).ToArray();
             return View(result);
         }
 
