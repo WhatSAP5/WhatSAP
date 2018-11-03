@@ -86,6 +86,11 @@ namespace WhatSAP.Controllers
                 return NotFound();
             }
 
+            var address = _context.Address.FirstOrDefault(x => x.AddressId == activity.AddressId);
+            ViewBag.Address = address.Address2;
+            ViewBag.Latitude = address.Latitude;
+            ViewBag.Longitude = address.Longitude;
+
             return View(activity);
         }
 
@@ -177,39 +182,6 @@ namespace WhatSAP.Controllers
             ViewData["AddressId"] = new SelectList(_context.Address, "AddressId", "Address1", activity.AddressId);
             ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "Email", activity.ClientId);
             return View(activity);
-        }
-
-        // GET: Activity/Delete/5
-        [Authorize]
-        [HttpGet, Route("delete")]
-        public async Task<IActionResult> Delete(long? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var activity = await _context.Activity
-                .Include(a => a.Address)
-                .Include(a => a.Client)
-                .SingleOrDefaultAsync(m => m.ActivityId == id);
-            if (activity == null)
-            {
-                return NotFound();
-            }
-
-            return View(activity);
-        }
-
-        // POST: Activity/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(long id)
-        {
-            var activity = await _context.Activity.SingleOrDefaultAsync(m => m.ActivityId == id);
-            _context.Activity.Remove(activity);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
         }
 
         private bool ActivityExists(long id)
