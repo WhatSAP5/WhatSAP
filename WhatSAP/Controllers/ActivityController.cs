@@ -76,7 +76,11 @@ namespace WhatSAP.Controllers
         {
             return View();
         }
-        
+        [Route("test/")]
+        public IActionResult Test()
+        {
+            return View();
+        }
         // GET: Activity/Details/5
         [Route("{id}")]
         public async Task<IActionResult> Details(long id)

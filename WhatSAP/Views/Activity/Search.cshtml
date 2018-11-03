@@ -7,115 +7,149 @@
 <html lang="en">
 
 <body>
+    <!--
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+
+    <link rel="stylesheet" href="~/css/site.css" />
+        -->
+    <link rel="stylesheet" href="~/lib/bootstrap-datepicker/dist/css/bootstrap-datepicker.css" />
+
+    <script src="~/js/site.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('.datepicker-me').datepicker({
+                format: 'dd-mm-yyyy',
+
+            });
+        });
+    </script>
     <br />
-
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">Date <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Price</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Categories
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Another action</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Something else here</a>
-                    </div>
-                </li>
-            </ul>
-
+    <div class="row mb-2">
+        <div class="col-md-3">
+            <strong>Date:</strong>
             <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                <div class="input-group date datepicker-me" data-provide="datepicker">
+
+                    <input type='text' class="form-control mr-sm-2" placeholder="Search the date" style="width:150px">
+                    <button class="btn btn-success" type="submit">Search</button>
+
+                </div>
             </form>
         </div>
-    </nav>
+        <div class="col-md-3">
 
+            <strong> Keyword:</strong>
+            <form class="form-inline my-2 my-lg-0">
 
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" style="width:150px">
+                <button class="btn btn-success" type="submit">Search</button>
+            </form>
+        </div>
+        <div class="col-md-3">
+
+            <form>
+                <div class="form-group">
+                    <label for="formControlRange"><strong>Price</strong></label>
+                    <input type="range" class="form-control-range" id="formControlRange">
+                </div>
+            </form>
+        </div>
+        <div class="col-md-3">
+            <strong> Category</strong>
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Choose a Category
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="#">Action</a>
+                    <a class="dropdown-item" href="#">Another action</a>
+                    <a class="dropdown-item" href="#">Something else here</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr />
     <main role="main" class="container">
 
         <br />
-            <div class="row mb-2">
-                <div class="col-md-3">
-                    <div class="card flex-md-row mb-4 shadow-sm h-md-250">
-                        <div class="card-body d-flex flex-column align-items-start">
-                            <strong class="text-primary">Sports Class</strong>
-                        </div>
-                        <img class="card-img-right flex-auto d-none d-lg-block" src="~/images/activities/Sportsclass.jpg" alt="Card image cap" style="height:70px">
+        <div class="row mb-2">
+            <div class="col-md-3">
+                <div class="card flex-md-row mb-4 shadow-sm h-md-250">
+                    <div class="card-body d-flex flex-column align-content-center">
+
+                        <strong class="text-primary">Sports Class</strong>
                     </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card flex-md-row mb-4 shadow-sm h-md-250">
-                        <div class="card-body d-flex flex-column align-items-start">
-                            <strong class="text-primary">Lesson&Class</strong>
-                        </div>
-                        <img class="card-img-right flex-auto d-none d-lg-block" src="~/images/activities/Craftclass.jpg" alt="Card image cap" style="height:70px">
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card flex-md-row mb-4 shadow-sm h-md-250">
-                        <div class="card-body d-flex flex-column align-items-start">
-                            <strong class="text-primary">Indoor activity</strong>
-                        </div>
-                        <img class="card-img-right flex-auto d-none d-lg-block" src="~/images/activities/Indoor.jpg" alt="Card image cap" style="height:70px">
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card flex-md-row mb-4 shadow-sm h-md-250">
-                        <div class="card-body d-flex flex-column align-items-start">
-                            <strong class="text-primary">Outdoor activity</strong>
-                        </div>
-                        <img class="card-img-right flex-auto d-none d-lg-block" src="~/images/activities/Outdoor.jpg" alt="Card image cap" style="height:70px">
-                    </div>
+                    <img class="card-img-right flex-auto d-none d-lg-block" src="~/images/activities/Sportsclass.jpg" alt="Card image cap" style="height:70px">
                 </div>
             </div>
-
-                <h6 class="border-bottom pb-2 mb-0">Search Result</h6>
-                <div class="row">
-                    <div class="my-3 p-3 bg-white rounded shadow-sm">
-
-                        @for (int i = 0; i < Model.Count(); i++)
-                        {
-
-                            <div class="media text-muted pt-3">
-                                <div class="col-sm-2">
-                                    <img src="~/images/activities/@(Model.ElementAt(i).Key).jpg" alt="" class="mr-2 rounded" style="height:70px; width:70px" >
-                                </div>
-
-                                <div class="col-sm-8">
-                                    <p class="media-body pb-3 mb-0 small lh-125">
-
-                                        <strong class="d-block text-gray-dark">@Model.ElementAt(i).ActivityName</strong>
-                                        @Model.ElementAt(i).Description
-                                        
-                                    </p>
-
-                                </div>
-
-                                <div class="col-sm-2">
-                                    $@Model.ElementAt(i).Price per person
-                                </div>
-
-
-                            </div>
-                            <hr />
-
-
-                        }
+            <div class="col-md-3">
+                <div class="card flex-md-row mb-4 shadow-sm h-md-250">
+                    <div class="card-body d-flex flex-column align-items-start">
+                        <strong class="text-primary">Lesson&Class</strong>
                     </div>
+                    <img class="card-img-right flex-auto d-none d-lg-block" src="~/images/activities/Craftclass.jpg" alt="Card image cap" style="height:70px">
                 </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card flex-md-row mb-4 shadow-sm h-md-250">
+                    <div class="card-body d-flex flex-column align-items-start">
+                        <strong class="text-primary">Indoor activity</strong>
+                    </div>
+                    <img class="card-img-right flex-auto d-none d-lg-block" src="~/images/activities/Indoor.jpg" alt="Card image cap" style="height:70px">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card flex-md-row mb-4 shadow-sm h-md-250">
+                    <div class="card-body d-flex flex-column align-items-start">
+                        <strong class="text-primary">Outdoor activity</strong>
+                    </div>
+                    <img class="card-img-right flex-auto d-none d-lg-block" src="~/images/activities/Outdoor.jpg" alt="Card image cap" style="height:70px">
+                </div>
+            </div>
+        </div>
 
-            
+        <h6 class="border-bottom pb-2 mb-0">Search Result</h6>
+        <div class="row">
+            <div class="my-3 p-3 bg-white rounded shadow-sm">
 
-</main>
+                @for (int i = 0; i < Model.Count(); i++)
+                {
+
+                    <div class="media text-muted pt-3">
+                        <div class="col-sm-2">
+                            <img src="~/images/activities/@(Model.ElementAt(i).Key).jpg" alt="" class="mr-2 rounded" style="height:70px; width:70px">
+                        </div>
+
+                        <div class="col-sm-8">
+                            <p class="media-body pb-3 mb-0 small lh-125">
+
+                                <strong class="d-block text-gray-dark">@Model.ElementAt(i).ActivityName</strong>
+                                @Model.ElementAt(i).Description
+
+                            </p>
+
+                        </div>
+
+                        <div class="col-sm-2">
+                            $@Model.ElementAt(i).Price per person
+                        </div>
+
+
+                    </div>
+                    <hr />
+
+
+                }
+            </div>
+        </div>
+
+
+
+    </main>
 
 
 
