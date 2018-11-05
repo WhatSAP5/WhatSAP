@@ -36,7 +36,7 @@
         <div class="collapse navbar-collapse" id="navbarColor01">
             <ul class="navbar-nav mr-auto">
 
-                @if (user == null || !(userType.Equals("Client")))
+                @if (user == null || !((userType.Equals("Client")) || userType.Equals("Admin")))
                 {
                     <li class="nav-item active"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
                     <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="About">About</a></li>
@@ -52,7 +52,7 @@
                         </div>
                     </li>
                 }
-                @*TODO: Client Entrance*@
+                @* Client Entrance*@
                 @if (user != null && userType.Equals("Client"))
                 {
                     <li class="nav-item ">
@@ -60,6 +60,13 @@
                     </li>
                 }
 
+                @* Admin Entrance *@
+                @if (user != null && userType.Equals("Admin"))
+                {
+                    <li class="nav-item ">
+                        <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="Index">Dashboard</a>
+                    </li>
+                }
                 <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
 
             </ul>
