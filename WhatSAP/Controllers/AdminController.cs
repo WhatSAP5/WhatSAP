@@ -86,7 +86,7 @@ namespace WhatSAP.Controllers
                     _context.Administrator.Add(admin);
                     await _context.SaveChangesAsync();
                     ViewData["Message"] = "Registration succeed";
-                    return View("Login");
+                    return RedirectToAction("Index", "Admin");
                 }
             }
             //TODO: Need to create UI for exception w/ message choose different email address
