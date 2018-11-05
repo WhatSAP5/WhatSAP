@@ -11,7 +11,10 @@ body {
     padding-left: 15px;
     padding-right: 15px;
 }
-
+.thumbnail img {
+    height: 50px;
+    width: 50px;
+}
 /* Carousel */
 .carousel-caption p {
     font-size: 20px;
