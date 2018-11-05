@@ -18,7 +18,7 @@
             <div class="carousel-caption d-none d-md-block" role="option">
                 <p>
                     Centennial College Weekly Book Club <br />
-                    <a class="btn btn-primary" href="@Url.Action("Details", "Activity")" title="See Details">
+                    <a class="btn btn-primary" href="@Url.Action("Details", "Activity", new { id = 1 })" title="See Details">
                         See Details
                         @*TODO: Should be replaced! Calling Details method in Activity Controller by passing the activity ID*@
                     </a>
@@ -53,7 +53,7 @@
                 <p>
                     What do you love? <br />
                     Do more of it with WhatSAP! <br />
-                    <a class="btn btn-primary" href="@Url.Action("ChooseStatus", "Account")" title="register">
+                    <a class="btn btn-primary" href="@Url.Action("Register", "Account")" title="register">
                         Register Now!
                     </a>
                 </p>

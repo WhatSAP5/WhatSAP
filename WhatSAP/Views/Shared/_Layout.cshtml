@@ -35,32 +35,28 @@
         </a>
         <div class="collapse navbar-collapse" id="navbarColor01">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item active"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="About">About</a></li>
 
-                @*Activity Menu*@
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="true">Activities</a>
-                    <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 40px, 0px); top: 0px; left: 0px; will-change: transform;">
-                        <a class="dropdown-item" asp-area="" asp-controller="Activity" asp-action="Index">Activity List</a>
-                        <a class="dropdown-item" asp-area="" asp-controller="Activity" asp-action="Search">Search Activity</a>
-                        <a class="dropdown-item" asp-area="" asp-controller="Activity" asp-action="Review">Activity Reviews</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Separated link</a>
-                    </div>
-                </li>
-
-                @*TODO: Client Entrance*@
-                @if (user != null && userType.Equals("Client"))
+                @if (user == null || !(userType.Equals("Client")))
                 {
+                    <li class="nav-item active"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="About">About</a></li>
+                    @*Activity Menu*@
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="true">Client</a>
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="true">Activities</a>
                         <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 40px, 0px); top: 0px; left: 0px; will-change: transform;">
-                            <a class="dropdown-item" asp-area="" asp-controller="Client" asp-action="Request">Request to Add Activity</a>
-                            <a class="dropdown-item" asp-area="" asp-controller="Client" asp-action="List">Booking List</a>
+                            <a class="dropdown-item" asp-area="" asp-controller="Activity" asp-action="Index">Activity List</a>
+                            <a class="dropdown-item" asp-area="" asp-controller="Activity" asp-action="Search">Search Activity</a>
+                            <a class="dropdown-item" asp-area="" asp-controller="Activity" asp-action="Review">Activity Reviews</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="#">Separated link</a>
                         </div>
+                    </li>
+                }
+                @*TODO: Client Entrance*@
+                @if (user != null && userType.Equals("Client"))
+                {
+                    <li class="nav-item ">
+                        <a class="nav-link" asp-area="" asp-controller="Client" asp-action="Index">Dashboard</a>
                     </li>
                 }
 
@@ -80,25 +76,6 @@
                     <li class="nav-item"> <a class="nav-link active" asp-area="" asp-controller="Accounts" asp-action="Logout">Logout</a></li>
                 }
             </ul>
-
-            @*<ul class="navbar-nav navbar-right">
-                    <li class="nav-item">
-                        <form id="logout" action="@Url.Action("Logout", "Accounts")" method="POST">
-                            <a class="nav-link active" href="javascript: $('#logout').submit()" title="Log out">
-                                Log Out <br />
-                                <span class="tagline">@User.Identity.Name</span>
-                            </a>
-                        </form>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link active" href="@Url.Action("Login", "Accounts")" title="Log in">Log In</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="@Url.Action("Register", "Accounts")" title="Register">Register</a>
-                    </li>
-
-                </ul>*@
         </div>
     </nav>
 

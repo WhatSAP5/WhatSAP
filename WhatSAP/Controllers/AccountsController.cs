@@ -73,7 +73,7 @@ namespace WhatSAP.Controllers
                                 HttpContext.Session.SetString("token", loginViewModel.Email);
                                 HttpContext.Session.SetString("user", client.FirstName + " " + client.LastName);
                                 HttpContext.Session.SetString("userType", loginViewModel.UserType);
-                                return RedirectToAction("Index", "Home");
+                                return RedirectToAction("Index", "Client");
                             }
                             else
                             {

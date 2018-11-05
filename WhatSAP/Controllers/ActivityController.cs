@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WhatSAP.Models;
 
-
 namespace WhatSAP.Controllers
 {
     [Route("activity")]
@@ -23,18 +22,23 @@ namespace WhatSAP.Controllers
 
         // GET: Activity
         [Route("")]
-        public IActionResult Index(int page = 0, string sortBy = "")
+        public IActionResult Index(int page = 1, string sortBy = "")
         {
             var pageSize = 3;
             var totalActivities = _context.Activity.Count();
             var totalPages = totalActivities / pageSize;
             var previousPage = page - 1;
+            var currentPage = page;
             var nextPage = page + 1;
 
+            ViewBag.CurrentPage = currentPage;
+            ViewBag.TotalPage = totalPages;
             ViewBag.PreviousPage = previousPage;
-            ViewBag.HasPreviousPage = previousPage >= 0;
+            ViewBag.HasPreviousPage = previousPage > 0;
             ViewBag.NextPage = nextPage;
             ViewBag.HasNextPage = nextPage <= totalPages;
+            ViewBag.PreviousPageIsEllipsis = false;
+
 
             //var activity = from ac in _context.Activity
             //               select ac;
@@ -66,8 +70,7 @@ namespace WhatSAP.Controllers
                     break;
             }
 
-            var result = activity.Skip(pageSize * page).Take(pageSize).ToArray();
-
+            var result = activity.Skip(pageSize * (page - 1)).Take(pageSize).ToArray();
             return View(result);
         }
 
@@ -76,24 +79,22 @@ namespace WhatSAP.Controllers
         {
             return View();
         }
-        [Route("test/")]
-        public IActionResult Test()
-        {
-            return View();
-        }
+        
         // GET: Activity/Details/5
-        [Route("{id}")]
-        public async Task<IActionResult> Details(long id)
+        [Route("details/{id}")]
+        public IActionResult Details(long id)
         {
-            var activity = await _context.Activity
-                .Include(a => a.Address)
-                .Include(a => a.Client)
-                .SingleOrDefaultAsync(m => m.ActivityId == id);
+            var activity = _context.Activity.FirstOrDefault(x => x.ActivityId == id);
 
             if (activity == null)
             {
                 return NotFound();
             }
+
+            var address = _context.Address.FirstOrDefault(x => x.AddressId == activity.AddressId);
+            ViewBag.Address = address.Address2;
+            ViewBag.Latitude = address.Latitude;
+            ViewBag.Longitude = address.Longitude;
 
             return View(activity);
         }
@@ -188,39 +189,6 @@ namespace WhatSAP.Controllers
             return View(activity);
         }
 
-        // GET: Activity/Delete/5
-        [Authorize]
-        [HttpGet, Route("delete")]
-        public async Task<IActionResult> Delete(long? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var activity = await _context.Activity
-                .Include(a => a.Address)
-                .Include(a => a.Client)
-                .SingleOrDefaultAsync(m => m.ActivityId == id);
-            if (activity == null)
-            {
-                return NotFound();
-            }
-
-            return View(activity);
-        }
-
-        // POST: Activity/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(long id)
-        {
-            var activity = await _context.Activity.SingleOrDefaultAsync(m => m.ActivityId == id);
-            _context.Activity.Remove(activity);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
         private bool ActivityExists(long id)
         {
             return _context.Activity.Any(e => e.ActivityId == id);
@@ -228,45 +196,9 @@ namespace WhatSAP.Controllers
         */
 
         [Route("search")]
-        public IActionResult Search(string sortBy = "")
+        public IActionResult Search()
         {
-            
-            var totalActivities = _context.Activity.Count();
-            var totalPages = totalActivities;
-           
-            //var activity = from ac in _context.Activity
-            //               select ac;
-
-            IEnumerable<Activity> activity = _context.Activity;
-
-            switch (sortBy)
-            {
-                case "Name":
-                    activity = activity.OrderBy(x => x.ActivityName);
-                    break;
-                case "Date":
-                    activity = activity.OrderBy(x => x.ActivityDate);
-                    break;
-                case "Price":
-                    activity = activity.OrderByDescending(x => x.Price);
-                    break;
-                case "PriceLow":
-                    activity = activity.OrderBy(x => x.Price);
-                    break;
-                case "Rate":
-                    activity = activity.OrderByDescending(x => x.Rate);
-                    break;
-                case "RateLow":
-                    activity = activity.OrderBy(x => x.Rate);
-                    break;
-                default:
-                    activity = activity.OrderByDescending(x => x.Rate);
-                    break;
-            }
-
-            var result = activity.ToArray();
-            return View(result);
-
+            return View();
         }
 
 

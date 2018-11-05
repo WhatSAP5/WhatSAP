@@ -55,7 +55,7 @@ namespace WhatSAP.Models
                 entity.HasOne(d => d.Address)
                     .WithMany(p => p.Activity)
                     .HasForeignKey(d => d.AddressId)
-                    .HasConstraintName("FK__Activity__Addres__74794A92");
+                    .HasConstraintName("FK__Activity__Addres__03BB8E22");
 
                 entity.HasOne(d => d.Category)
                     .WithMany(p => p.Activity)
@@ -79,6 +79,10 @@ namespace WhatSAP.Models
                 entity.Property(e => e.City)
                     .IsRequired()
                     .HasMaxLength(50);
+
+                entity.Property(e => e.Latitude).HasColumnType("decimal(8, 6)");
+
+                entity.Property(e => e.Longitude).HasColumnType("decimal(9, 6)");
 
                 entity.Property(e => e.PostalCode).IsRequired();
 
@@ -161,7 +165,6 @@ namespace WhatSAP.Models
 
             modelBuilder.Entity<Customer>(entity =>
             {
-
                 entity.Property(e => e.Email)
                     .IsRequired()
                     .HasMaxLength(128);
@@ -177,7 +180,6 @@ namespace WhatSAP.Models
                 entity.Property(e => e.Password)
                     .IsRequired()
                     .HasMaxLength(200);
-
             });
         }
     }
