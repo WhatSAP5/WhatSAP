@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using WhatSAP.Models;
 using WhatSAP.Models.Account;
 
@@ -92,6 +93,13 @@ namespace WhatSAP.Controllers
             //TODO: Need to create UI for exception w/ message choose different email address
             throw new Exception("user email has already exist");
         }
+
+        //GET Activity request lists
+        public async Task<ActionResult> ActivityRequest()
+        {
+            return View(await _context.Activity.Where(x=>x.Authorized.Equals(false)).ToListAsync());
+        }
+
 
         private Administrator FindAdminByUsername(string username)
         {
