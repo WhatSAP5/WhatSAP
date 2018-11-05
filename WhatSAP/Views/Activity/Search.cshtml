@@ -1,19 +1,10 @@
 ﻿@model IEnumerable<WhatSAP.Models.Activity>
 
-@{
-    ViewData["Title"] = "Search";
-}
 
 <html lang="en">
 
 <body>
-    <!--
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
-
-    <link rel="stylesheet" href="~/css/site.css" />
-        -->
     <link rel="stylesheet" href="~/lib/bootstrap-datepicker/dist/css/bootstrap-datepicker.css" />
-
     <script src="~/js/site.min.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
@@ -112,42 +103,7 @@
             </div>
         </div>
 
-        <h6 class="border-bottom pb-2 mb-0">Search Result</h6>
-        <div class="row">
-            <div class="my-3 p-3 bg-white rounded shadow-sm">
-
-                @for (int i = 0; i < Model.Count(); i++)
-                {
-
-                    <div class="media text-muted pt-3">
-                        <div class="col-sm-2">
-                            <img src="~/images/activities/@(Model.ElementAt(i).Key).jpg" alt="" class="mr-2 rounded" style="height:70px; width:70px">
-                        </div>
-
-                        <div class="col-sm-8">
-                            <p class="media-body pb-3 mb-0 small lh-125">
-
-                                <strong class="d-block text-gray-dark">@Model.ElementAt(i).ActivityName</strong>
-                                @Model.ElementAt(i).Description
-
-                            </p>
-
-                        </div>
-
-                        <div class="col-sm-2">
-                            $@Model.ElementAt(i).Price per person
-                        </div>
-
-
-                    </div>
-                    <hr />
-
-
-                }
-            </div>
-        </div>
-
-
+        <partial name="~/Views/Shared/_SearchResult.cshtml" />
 
     </main>
 

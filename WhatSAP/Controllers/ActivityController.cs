@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WhatSAP.Models;
 
+
 namespace WhatSAP.Controllers
 {
     [Route("activity")]
@@ -79,7 +80,7 @@ namespace WhatSAP.Controllers
         {
             return View();
         }
-        
+
         // GET: Activity/Details/5
         [Route("details/{id}")]
         public IActionResult Details(long id)
@@ -198,7 +199,27 @@ namespace WhatSAP.Controllers
         [Route("search")]
         public IActionResult Search()
         {
-            return View();
+            var totalActivities = _context.Activity.Count();
+            var totalPages = totalActivities;
+
+            IEnumerable<Activity> activity = _context.Activity;
+
+            var result = activity.ToArray();
+            return View(result);
+
+        }
+
+        [HttpPost, Route("search/{keyword}")]
+        public IActionResult Search(string keyword)
+        {
+            var totalActivities = _context.Activity.Count();
+            var totalPages = totalActivities;
+
+            IEnumerable<Activity> activity = _context.Activity;
+
+            var result = activity.ToArray();
+            return View(result);
+
         }
 
 
