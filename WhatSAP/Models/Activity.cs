@@ -16,12 +16,10 @@ namespace WhatSAP.Models
         public decimal Rate { get; set; }
         public long? ClientId { get; set; }
         public string Key { get; set; }
+        public bool Authorized { get; set; }
 
         public Address Address { get; set; }
         public Category Category { get; set; }
         public Client Client { get; set; }
-
-
     }
-
 }
