@@ -181,7 +181,7 @@ namespace WhatSAP.Controllers
         {
             return _context.Client.SingleOrDefault(client => client.Email.Equals(email));
         }
-        private string EncryptionPassword(string password)
+        public static string EncryptionPassword(string password)
         {
             MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();
             UTF8Encoding encode = new UTF8Encoding();
