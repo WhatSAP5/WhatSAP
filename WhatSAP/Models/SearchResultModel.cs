@@ -17,6 +17,8 @@ namespace WhatSAP.Models
 
         public long CategoryId { get; set; }
 
+        public long typeId { get; set; }
+
         public List<Activity> ActivityResults { get; set; }
 
         public SearchResultModel()
