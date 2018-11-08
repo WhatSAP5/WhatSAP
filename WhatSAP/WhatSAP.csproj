@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
+    <UserSecretsId>d87734fa-bb00-461e-b577-fb5c7a6cc53f</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,6 +16,11 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Views\Componenets\" />
   </ItemGroup>
 
 </Project>

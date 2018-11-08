@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using WhatSAP.Models;
 
 namespace WhatSAP
@@ -31,11 +32,18 @@ namespace WhatSAP
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-                options.CheckConsentNeeded = context => true;
+                options.CheckConsentNeeded = context => false;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.TryAddSingleton(Configuration);
+            services.AddSession(options =>
+            {
+                // Set a short timeout for easy testing.
+                options.IdleTimeout = TimeSpan.FromSeconds(600);
+            });
+           
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
@@ -51,10 +59,10 @@ namespace WhatSAP
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
-
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
+            app.UseSession();
 
             app.UseMvc(routes =>
             {

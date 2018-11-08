@@ -27,11 +27,11 @@ namespace WhatSAP.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //if (!optionsBuilder.IsConfigured)
-//            {
+            if (!optionsBuilder.IsConfigured)
+            {
 //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-//                optionsBuilder.UseSqlServer("Data Source=tcp:whatsap.database.windows.net;database=WhatSAP;Persist Security Info=False;User ID=WhatsapAdmin;Password=Centennial@123;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
-//            }
+                optionsBuilder.UseSqlServer("Data Source=tcp:whatsap.database.windows.net;database=WhatSAP;Persist Security Info=False;User ID=WhatsapAdmin;Password=Centennial@123;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -55,7 +55,7 @@ namespace WhatSAP.Models
                 entity.HasOne(d => d.Address)
                     .WithMany(p => p.Activity)
                     .HasForeignKey(d => d.AddressId)
-                    .HasConstraintName("FK__Activity__Addres__74794A92");
+                    .HasConstraintName("FK__Activity__Addres__03BB8E22");
 
                 entity.HasOne(d => d.Category)
                     .WithMany(p => p.Activity)
@@ -79,6 +79,10 @@ namespace WhatSAP.Models
                 entity.Property(e => e.City)
                     .IsRequired()
                     .HasMaxLength(50);
+
+                entity.Property(e => e.Latitude).HasColumnType("decimal(8, 6)");
+
+                entity.Property(e => e.Longitude).HasColumnType("decimal(9, 6)");
 
                 entity.Property(e => e.PostalCode).IsRequired();
 
@@ -161,8 +165,6 @@ namespace WhatSAP.Models
 
             modelBuilder.Entity<Customer>(entity =>
             {
-                entity.Property(e => e.DateOfBirth).HasColumnType("datetime");
-
                 entity.Property(e => e.Email)
                     .IsRequired()
                     .HasMaxLength(128);
@@ -178,8 +180,6 @@ namespace WhatSAP.Models
                 entity.Property(e => e.Password)
                     .IsRequired()
                     .HasMaxLength(200);
-
-                entity.Property(e => e.Phone).IsRequired();
             });
         }
     }
