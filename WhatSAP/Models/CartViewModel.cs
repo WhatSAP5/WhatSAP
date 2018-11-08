@@ -8,14 +8,7 @@ namespace WhatSAP.Models
     public class CartViewModel
     {
         public int NumOfPeople { get; set; }
-        public double Total { get; set; }
-        public List<Activity> Activities { get; set; }
 
-        public CartViewModel()
-        {
-            NumOfPeople = 0;
-            Total = 0;
-            Activities = new List<Activity>();
-        }
+        public virtual Activity Activity { get; set; }
     }
 }

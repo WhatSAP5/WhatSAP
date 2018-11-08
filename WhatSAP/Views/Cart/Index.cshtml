@@ -1,5 +1,4 @@
-﻿@model WhatSAP.Models.CartViewModel
-<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+﻿<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 
 <section class="jumbotron text-center">
     <div class="container">
@@ -23,21 +22,22 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @if (Model.Activities.Count() == 0)
+                        @if (ViewBag.Cart == null)
                         {
                             <tr>
                                 <td>There is no saved activities</td>
                             </tr>
                         }
-                        @for (int i = 0; i < Model.Activities.Count(); i++)
+
+                        @foreach (var cart in ViewBag.Cart)
                         {
                             <tr>
-                                <td><img src="~/images/activities/@(Model.Activities.ElementAt(i).Key).jpg" /> </td>
-                                <td>@Model.Activities.ElementAt(i).ActivityName</td>
-                                <td>@Model.Activities.ElementAt(i).ActivityDate</td>
-                                <td><input class="form-control" type="text" value="1" /></td>
-                                <td class="text-right">@Model.Activities.ElementAt(i).Price</td>
-                                <td class="text-right"><button class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> </button> </td>
+                                <td><img src="~/images/activities/@(cart.Activity.Key).jpg" style="width: 100px; height: 100px" /> </td>
+                                <td>@cart.Activity.ActivityName</td>
+                                <td>@cart.Activity.ActivityDate</td>
+                                <td><input class="form-control" type="text" value="@(cart.NumOfPeople)" /></td>
+                                <td class="text-right">@cart.Activity.Price</td>
+                                <td class="text-right"><a class="btn btn-sm btn-danger" href="@Url.Action("Remove", "Cart", new { activityId = cart.Activity.ActivityId })"><i class="fa fa-trash"></i> </a> </td>
                             </tr>
                         }
                         <tr>
@@ -46,7 +46,7 @@
                             <td></td>
                             <td></td>
                             <td>Sub-Total</td>
-                            <td class="text-right">@Model.Total</td> 
+                            <td class="text-right">@ViewBag.Total</td>
                         </tr>
                         <tr>
                             <td></td>
@@ -54,7 +54,7 @@
                             <td></td>
                             <td></td>
                             <td><strong>Total</strong></td>
-                            <td class="text-right"><strong>@(Model.Total * 1.13)</strong></td>
+                            <td class="text-right"><strong>@(ViewBag.Total * 1.13)</strong></td>
                         </tr>
                     </tbody>
                 </table>
@@ -63,10 +63,10 @@
         <div class="col mb-2">
             <div class="row">
                 <div class="col-sm-12  col-md-6">
-                    <button class="btn btn-block btn-light" href="@Url.Action("Search", "Activity")">Looking more Activities</button>
+                    <a class="btn btn-block btn-light" href="@Url.Action("Index", "Activity")">Looking more Activities</a>
                 </div>
                 <div class="col-sm-12 col-md-6 text-right">
-                    <button class="btn btn-lg btn-block btn-success text-uppercase" href="#">Checkout</button> @*TODO: Implemented Payment*@
+                    <a class="btn btn-lg btn-block btn-success text-uppercase" href="#">Checkout</a> @*TODO: Implemented Payment*@
                 </div>
             </div>
         </div>

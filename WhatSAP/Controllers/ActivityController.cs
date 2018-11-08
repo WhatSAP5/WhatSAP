@@ -149,17 +149,5 @@ namespace WhatSAP.Controllers
 
             return View(searchResult);
         }
-
-        [Route("cart")]
-        public IActionResult Cart(long activityId)
-        {
-            var cart = new CartViewModel();
-            var activity = _context.Activity.FirstOrDefault(x => x.ActivityId == activityId);
-
-            cart.Activities.Add(activity);
-            cart.Total += activity.Price;
-
-            return View(cart);
-        }
     }
 }
