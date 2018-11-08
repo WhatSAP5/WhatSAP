@@ -43,7 +43,7 @@ namespace WhatSAP
                 // Set a short timeout for easy testing.
                 options.IdleTimeout = TimeSpan.FromSeconds(600);
             });
-
+           
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 

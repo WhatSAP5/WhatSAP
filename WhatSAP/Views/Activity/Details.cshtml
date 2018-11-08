@@ -15,7 +15,7 @@
 
 @*Container for the Activity detail page*@
 <div class="jumbotron">
-    <table class="table table-hover">
+    <table class="table">
 
         <tbody>
             <tr>
@@ -26,8 +26,8 @@
             </tr>
 
             <tr>
-                <td><button type="button" class="btn btn-primary btn-lg">SAVE</button></td>
-                <td><button type="button" class="btn btn-secondary btn-lg">PAY</button></td>
+                <td><a class="btn btn-primary btn-lg" href="@Url.Action("Save", "Cart", new { activityId = Model.ActivityId, numberOfPpl = 1 })">SAVE</a></td>
+                <td><a class="btn btn-secondary btn-lg">PAY</a></td>
             </tr>
         </tbody>
     </table>
@@ -53,7 +53,7 @@
                 width="800" height="600" frameborder="0" style="border:0" allowfullscreen></iframe>
     </p>
 
-    @*Google Map connected with db*@ 
+    @*Google Map connected with db*@
     <div id="map"></div>
     <script>
         function initMap() {
