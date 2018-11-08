@@ -117,7 +117,7 @@ namespace WhatSAP.Controllers
         }
 
         [HttpPost, Route("search")]
-        public IActionResult Search(string keyword = "", DateTime? date = null, double price = 0, long categoryId = 0)
+        public IActionResult Search(string keyword = "", DateTime? date = null, double price = 0, long categoryId = 0, int typeId=0)
         {
             var result = from a in _context.Activity
                          select a;
@@ -138,7 +138,12 @@ namespace WhatSAP.Controllers
             }
             else if (date != null) //TODO: Implement Date Search
             {
-                result = result.Where(x => x.ActivityDate <= date).OrderBy(x => x.Rate);
+                result = result.Where(x => x.ActivityDate.Date == date).OrderBy(x => x.Rate);
+            }
+
+            else if (typeId != 0)
+            {
+                result = result.Where(x => x.typeId == typeId).OrderBy(x => x.Rate);
             }
 
             ViewData["Categories"] = (from c in _context.Category

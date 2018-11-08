@@ -18,6 +18,8 @@ namespace WhatSAP.Models
         public string Key { get; set; }
         public bool Authorized { get; set; }
 
+        public long? typeId { get; set; }
+
         public Address Address { get; set; }
         public Category Category { get; set; }
         public Client Client { get; set; }
