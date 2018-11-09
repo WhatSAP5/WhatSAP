@@ -22,18 +22,22 @@ namespace WhatSAP.Controllers
 
         // GET: Activity
         [Route("")]
-        public IActionResult Index(int page = 0, string sortBy = "")
+        public IActionResult Index(int page = 1, string sortBy = "")
         {
             var pageSize = 3;
             var totalActivities = _context.Activity.Count();
             var totalPages = totalActivities / pageSize;
             var previousPage = page - 1;
+            var currentPage = page;
             var nextPage = page + 1;
 
+            ViewBag.CurrentPage = currentPage;
+            ViewBag.TotalPage = totalPages;
             ViewBag.PreviousPage = previousPage;
-            ViewBag.HasPreviousPage = previousPage >= 0;
+            ViewBag.HasPreviousPage = previousPage > 0;
             ViewBag.NextPage = nextPage;
             ViewBag.HasNextPage = nextPage <= totalPages;
+            ViewBag.PreviousPageIsEllipsis = false;
 
             //var activity = from ac in _context.Activity
             //               select ac;
@@ -65,7 +69,7 @@ namespace WhatSAP.Controllers
                     break;
             }
 
-            var result = activity.Skip(pageSize * page).Take(pageSize).ToArray();
+            var result = activity.Skip(pageSize * (page - 1)).Take(pageSize).ToArray();
             return View(result);
         }
 
@@ -74,7 +78,7 @@ namespace WhatSAP.Controllers
         {
             return View();
         }
-        
+
         // GET: Activity/Details/5
         [Route("details/{id}")]
         public IActionResult Details(long id)
@@ -86,187 +90,69 @@ namespace WhatSAP.Controllers
                 return NotFound();
             }
 
+            var address = _context.Address.FirstOrDefault(x => x.AddressId == activity.AddressId);
+            ViewBag.Address = address.Address2;
+            ViewBag.Latitude = address.Latitude;
+            ViewBag.Longitude = address.Longitude;
+
             return View(activity);
         }
 
-        //Auto Implemented CRUD methods
         /*
-        // GET: Activity/Create
-        [Authorize]
-        [HttpGet, Route("create")]
-        public IActionResult Create()
-        {
-            ViewData["AddressId"] = new SelectList(_context.Address, "AddressId", "Address1");
-            ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "Email");
-            return View();
-        }
-
-        // POST: Activity/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize]
-        [HttpPost, Route("create")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ActivityId,ActivityName,Description,ActivityDate,AddressId,Price,Capacity,ClientId")] Activity activity)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(activity);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-
-            ViewData["AddressId"] = new SelectList(_context.Address, "AddressId", "Address1", activity.AddressId);
-            ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "Email", activity.ClientId);
-            return View(activity);
-        }
-
-        // GET: Activity/Edit/5
-        [Authorize]
-        [HttpGet, Route("edit")]
-        public async Task<IActionResult> Edit(long? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var activity = await _context.Activity.SingleOrDefaultAsync(m => m.ActivityId == id);
-            if (activity == null)
-            {
-                return NotFound();
-            }
-            ViewData["AddressId"] = new SelectList(_context.Address, "AddressId", "Address1", activity.AddressId);
-            ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "Email", activity.ClientId);
-            return View(activity);
-        }
-
-        // POST: Activity/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize]
-        [HttpPost, Route("edit")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("ActivityId,ActivityName,Description,ActivityDate,AddressId,Price,Capacity,ClientId")] Activity activity)
-        {
-            if (id != activity.ActivityId)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(activity);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ActivityExists(activity.ActivityId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["AddressId"] = new SelectList(_context.Address, "AddressId", "Address1", activity.AddressId);
-            ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "Email", activity.ClientId);
-            return View(activity);
-        }
-
-        // GET: Activity/Delete/5
-        [Authorize]
-        [HttpGet, Route("delete")]
-        public async Task<IActionResult> Delete(long? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var activity = await _context.Activity
-                .Include(a => a.Address)
-                .Include(a => a.Client)
-                .SingleOrDefaultAsync(m => m.ActivityId == id);
-            if (activity == null)
-            {
-                return NotFound();
-            }
-
-            return View(activity);
-        }
-
-        // POST: Activity/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(long id)
-        {
-            var activity = await _context.Activity.SingleOrDefaultAsync(m => m.ActivityId == id);
-            _context.Activity.Remove(activity);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
         private bool ActivityExists(long id)
         {
             return _context.Activity.Any(e => e.ActivityId == id);
         }
         */
 
-        [Route("search")]
+        [HttpGet, Route("search")]
         public IActionResult Search()
         {
+            var categories = from c in _context.Category
+                             select c;
+
+            ViewData["Categories"] = categories.ToList();
+
             return View();
         }
 
-
-        //Search by Title
-        // SEARCH: Activity/Search/{keyworkd}
-        [HttpPost, Route("search/{keyword}")]
-        public IActionResult SearchResult(string keyword)
+        [HttpPost, Route("search")]
+        public IActionResult Search(string keyword = "", DateTime? date = null, double price = 0, long categoryId = 0, int typeId=0)
         {
-            if (keyword == null)
+            var result = from a in _context.Activity
+                         select a;
+
+            var searchResult = new SearchResultModel();
+
+            if (!String.IsNullOrEmpty(keyword))
             {
-                return NotFound();
+                result = result.Where(x => x.ActivityName.Contains(keyword)).OrderBy(x => x.Rate);
+            }
+            else if (price != 0)
+            {
+                result = result.Where(x => x.Price <= price).OrderBy(x => x.Rate);
+            }
+            else if (categoryId != 0)
+            {
+                result = result.Where(x => x.CategoryId == categoryId).OrderBy(x => x.Rate);
+            }
+            else if (date != null) //TODO: Implement Date Search
+            {
+                result = result.Where(x => x.ActivityDate.Date == date).OrderBy(x => x.Rate);
             }
 
-            var result = _context.Activity.Where(x => x.ActivityName.Contains(keyword)).ToArray();
-            return View(result);
-        }
-
-        //Search by Price
-        // SEARCH: Activity/Search/{keyworkd}
-        [HttpPost, Route("search/{keyword}")]
-        public IActionResult SearchResult(double price)
-        {
-            var result = _context.Activity.Where(x => x.Price <= price).ToArray();
-            return View(result);
-        }
-
-        [HttpGet, Route("search/{category}")]
-        public IActionResult SearchResult(long? categoryId, string category)
-        {
-            if (categoryId == null)
+            else if (typeId != 0)
             {
-                return NotFound();
+                result = result.Where(x => x.typeId == typeId).OrderBy(x => x.Rate);
             }
 
-            var result = _context.Activity.Where(x => x.CategoryId == categoryId).ToArray();
-            return View(result);
-        }
+            ViewData["Categories"] = (from c in _context.Category
+                                      select c).ToList();
 
-        //Search by Keyword
-        // SEARCH: Activity/Search/{category}
-        [HttpPost, Route("search/{category}")]
-        public IActionResult SearchResult(long categoryId, string category)
-        {
-            var result = _context.Activity.Where(x => x.CategoryId == categoryId).ToArray();
-            return View(result);
+            ViewBag.Search = true;
+            searchResult.ActivityResults = result.ToList();
+
+            return View(searchResult);
         }
     }
 }

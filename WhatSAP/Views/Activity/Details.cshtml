@@ -1,32 +1,53 @@
 ﻿@model WhatSAP.Models.Activity
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
 @{
     ViewData["Title"] = "Details";
+
+    var userType = "";
+    var user = "";
+    if (HttpContextAccessor.HttpContext.Session.GetString("user") != null)
+    {
+        user = HttpContextAccessor.HttpContext.Session.GetString("user");
+        userType = HttpContextAccessor.HttpContext.Session.GetString("userType");
+    }
 }
 
-@*<h2>Activity Details</h2>*@
-
+@*Map Css*@
+<style>
+    /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+    #map {
+        height: 600px;
+        width: 800px;
+    }
+</style>
 
 @*Container for the Activity detail page*@
 <div class="jumbotron">
-
-
-
-    <table class="table table-hover">
+    <table class="table">
 
         <tbody>
-
             <tr>
                 <th scope="row" rowspan="2">
                     <img style="height: 200px; width: 300px; display: block;" src="~/images/activities/@(Model.Key).jpg" alt="Card image">
                 </th>
                 <td><h2>@Model.ActivityName</h2></td>
             </tr>
-
             <tr>
-                <td><button type="button" class="btn btn-primary btn-lg">SAVE</button></td>
-                <td><button type="button" class="btn btn-secondary btn-lg">PAY</button></td>
-            </tr>
+                @if (user.Equals(""))
+                {
+                    <td><a class="btn btn-warning btn-lg" asp-action="Login" asp-controller="Accounts">Please log in to enjoy our activity</a></td>
+                }
+                else
+                {
+                    <td><a class="btn btn-primary btn-lg" href="@Url.Action("Save", "Cart", new { activityId = Model.ActivityId, numberOfPpl = 1 })">SAVE</a></td>
+                    <td><a class="btn btn-secondary btn-lg">PAY<br /></a></td>
+                }
 
+            </tr>
+            <tr>
+            </tr>
         </tbody>
     </table>
 
@@ -39,13 +60,10 @@
         @Model.Capacity
     </p>
 
-
-
     <hr class="my-4">
     <h4>Activity Detail</h4>
     <p>
         @Model.Description
-        Activity Detail Here Activity Detail Here Activity Detail Here Activity Detail Here Activity Detail Here
     </p>
 
     <p>
@@ -54,5 +72,46 @@
                 width="800" height="600" frameborder="0" style="border:0" allowfullscreen></iframe>
     </p>
 
+    @*Google Map connected with db*@
+    <div id="map"></div>
+    <script>
+        function initMap() {
+            var center = { lat: @ViewBag.Latitude, lng: @ViewBag.Longitude };
+
+            var map = new google.maps.Map(document.getElementById('map'), {
+                center: center,
+                zoom: 16
+            });
+
+            //Address2 Name
+            var title = "@ViewBag.Address";
+
+            //content of the infoWindow
+            var contentString = '<div id="content">' +
+                '<div id="siteNotice">' +
+                '</div>' +
+                '<h1 id="firstHeading" class="firstHeading">' + title + '</h1>' +
+                '<div id="bodyContent">' +
+                '<p><b>' + title + '</b></p>' +
+                '</div>' +
+                '</div>';
+
+            var infowindow = new google.maps.InfoWindow({
+                content: contentString
+            });
+
+            var marker = new google.maps.Marker({
+                position: center,
+                map: map,
+                title: title
+            });
+
+            marker.addListener('click', function () {
+                infowindow.open(map, marker);
+            });
+        }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBJrDYD9WP6AYhqXoYC07B8idcHEO13rNc&callback=initMap"
+            async defer></script>
 
 </div>

@@ -6,6 +6,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Views\Componenets\**" />
+    <Content Remove="Views\Componenets\**" />
+    <EmbeddedResource Remove="Views\Componenets\**" />
+    <None Remove="Views\Componenets\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="bootstrap" Version="4.1.3" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.4" />
