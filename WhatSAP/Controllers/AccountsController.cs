@@ -27,6 +27,21 @@ namespace WhatSAP.Controllers
         //GET   /Accounts/login
         public IActionResult Login()
         {
+            if (HttpContext.Session.GetString("user") != null)
+            {
+                if (HttpContext.Session.GetString("userType").Equals("Customer"))
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+                else if (HttpContext.Session.GetString("userType").Equals("Client"))
+                {
+                    return RedirectToAction("Index", "Client");
+                }
+                else if (HttpContext.Session.GetString("userType").Equals("Admin"))
+                {
+                    return RedirectToAction("Index", "Admin");
+                }
+            }
             return View(new LoginViewModel());
         }
 
