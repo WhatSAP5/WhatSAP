@@ -154,5 +154,12 @@ namespace WhatSAP.Controllers
 
             return View(searchResult);
         }
+
+        [Route("ActivityRequestDetail/{id}")]
+        public ActionResult ActivityRequestDetail(long? id)
+        {
+
+            return View();
+        }
     }
 }

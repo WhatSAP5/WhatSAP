@@ -28,10 +28,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="@Url.Action("ActivityRequest", "Client")">
-                                <span data-feather="file"></span>
-                                Request Activities
-                            </a>
+                            <a class="nav-link" asp-action="ActivityRequest" asp-route-id="@Model.ClientId">Pending activity list</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">
