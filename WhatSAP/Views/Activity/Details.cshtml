@@ -1,6 +1,16 @@
 ﻿@model WhatSAP.Models.Activity
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
 @{
     ViewData["Title"] = "Details";
+
+    var userType = "";
+    var user = "";
+    if (HttpContextAccessor.HttpContext.Session.GetString("user") != null)
+    {
+        user = HttpContextAccessor.HttpContext.Session.GetString("user");
+        userType = HttpContextAccessor.HttpContext.Session.GetString("userType");
+    }
 }
 
 @*Map Css*@
@@ -24,13 +34,22 @@
                 </th>
                 <td><h2>@Model.ActivityName</h2></td>
             </tr>
-
             <tr>
-                <td><a class="btn btn-primary btn-lg" href="@Url.Action("Save", "Cart", new { activityId = Model.ActivityId, numberOfPpl = 1 })">SAVE</a></td>
-                <td><a class="btn btn-secondary btn-lg">PAY</a></td>
+                @if (user.Equals(""))
+                {
+                    <td><a class="btn btn-warning btn-lg" asp-action="Login" asp-controller="Accounts">Please log in to enjoy our activity</a></td>
+                }
+                else
+                {
+                    <td><a class="btn btn-primary btn-lg" href="@Url.Action("Save", "Cart", new { activityId = Model.ActivityId, numberOfPpl = 1 })">SAVE</a></td>
+                    <td><a class="btn btn-secondary btn-lg">PAY<br /></a></td>
+                }
+
+            </tr>
+            <tr>
             </tr>
         </tbody>
-    </table>
+    </table>s
 
     <p class="lead">
         Activity Date: <br />
