@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
@@ -11,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.FileProviders;
 using WhatSAP.Models;
 
 namespace WhatSAP
@@ -28,7 +30,8 @@ namespace WhatSAP
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<WhatSAPContext>(options => options.UseSqlServer(Configuration.GetConnectionString("WhatSAPDatabase")));
-
+            services.AddSingleton<IFileProvider>(
+                                              new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")));
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.

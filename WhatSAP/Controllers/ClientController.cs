@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -54,9 +55,44 @@ namespace WhatSAP.Controllers
             }
             return View(activity);
         }
+
+        public IActionResult RequestForm()
+        {
+            Activity activity = new Activity();
+            return View(activity);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RequestForm([Bind("ActivityId", "ActivityName", "Description", "ClientId")]Activity activity, IFormFile file)
+        {
+            if (file == null)
+                return Content("File is not selected");
+
+            var path = Path.Combine(
+                                    Directory.GetCurrentDirectory(), "wwwroot/RequestForm",
+                                    file.FileName);
+            using (var stream = new FileStream(path, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            if (ModelState.IsValid)
+            {
+                activity.RequestFormPath = Path.Combine("wwwroot/RequestForm", file.FileName);
+                activity.ClientId = HttpContext.Session.GetInt32("token");
+                _context.Activity.Add(activity);
+            }
+            await _context.SaveChangesAsync();
+
+            return View();
+        }
+
         public ActionResult BookingList()
         {
             return View();
         }
+
+
     }
 }
