@@ -88,7 +88,7 @@ namespace WhatSAP.Controllers
             await cloudBlockBlob.UploadFromStreamAsync(stream);
             stream.Dispose();
 
-            activity.RequestFormPath = "https://whatsapstorage.blob.core.windows.net/whatsap/" + activity.ActivityId + "_" + file.FileName
+            activity.RequestFormPath = "https://whatsapstorage.blob.core.windows.net/whatsap/" + activity.ActivityId + "_" + file.FileName;
             _context.Update(activity);
             await _context.SaveChangesAsync();
 
@@ -96,6 +96,17 @@ namespace WhatSAP.Controllers
             return RedirectToAction("ActivityRequest", "Client", new { id = activity.ClientId });
         }
 
+        public async Task<ActionResult> Download()
+        {
+            var filename = "ActivityReqeustForm.docx";
+            CloudBlobContainer container = BlobsController.GetClouldBlobContainer();
+            CloudBlockBlob blob = container.GetBlockBlobReference(filename);
+
+            Stream blobStream = await blob.OpenReadAsync();
+
+            return File(blobStream, blob.Properties.ContentType, filename);
+
+        }
         private CloudBlobContainer GetCloudBlobContainer()
         {
             throw new NotImplementedException();
