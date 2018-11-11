@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace WhatSAP.Models
 {
@@ -11,6 +12,8 @@ namespace WhatSAP.Models
         public long? CategoryId { get; set; }
         public DateTime? ActivityDate { get; set; }
         public long? AddressId { get; set; }
+
+        [DataType(DataType.Currency)]
         public double? Price { get; set; }
         public int? Capacity { get; set; }
         public decimal? Rate { get; set; }
