@@ -155,8 +155,14 @@ namespace WhatSAP.Controllers
         [Route("ActivityRequestDetail/{id}")]
         public ActionResult ActivityRequestDetail(long? id)
         {
+            var items = _context.Activity.Where(x => x.ActivityId.Equals(id)).FirstOrDefault();
 
-            return View();
+            if(id == null)
+            {
+                return NotFound();
+            }
+
+            return View(items);
         }
     }
 }
