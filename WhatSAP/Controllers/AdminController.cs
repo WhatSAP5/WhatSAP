@@ -100,7 +100,27 @@ namespace WhatSAP.Controllers
             return View(await _context.Activity.Where(x=>x.Authorized.Equals(false)).ToListAsync());
         }
 
+        public async Task<IActionResult> ConfirmAcitivity(long? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
+            var activity = _context.Activity.Where(x => x.ActivityId.Equals(id)).FirstOrDefault();
+
+            if (activity == null)
+            {
+                return NotFound();
+            }
+
+            activity.Authorized = true;
+
+            _context.Update(activity);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("ActivityRequest", "Admin");
+        }
         private Administrator FindAdminByUsername(string username)
         {
             Administrator admin;
