@@ -1,11 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WhatSAP.Models;
+using Microsoft.Azure;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.File;
+using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace WhatSAP.Controllers
 {
@@ -22,7 +27,8 @@ namespace WhatSAP.Controllers
         // GET: Client
         public async Task<IActionResult> Index(long? id)
         {
-            if(id == null)
+
+            if (id == null)
             {
                 return NotFound();
             }
@@ -54,9 +60,63 @@ namespace WhatSAP.Controllers
             }
             return View(activity);
         }
+
+        public IActionResult RequestForm()
+        {
+            Activity activity = new Activity();
+            return View(activity);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RequestForm([Bind("ActivityId", "ActivityName", "Description", "ActivityDate", "Price", "ClientId")]Activity activity, IFormFile file)
+        {
+            if (file == null)
+                return Content("File is not selected");
+            Path.GetTempFileName();
+            if (ModelState.IsValid)
+            {
+                activity.ClientId = (long)HttpContext.Session.GetInt32("token");
+                _context.Activity.Add(activity);
+            }
+            await _context.SaveChangesAsync();
+
+            CloudBlobContainer container = BlobsController.GetClouldBlobContainer();
+            CloudBlockBlob cloudBlockBlob = container.GetBlockBlobReference(activity.ActivityId +"_" + file.FileName);
+            var stream = file.OpenReadStream();
+         
+            await cloudBlockBlob.UploadFromStreamAsync(stream);
+            stream.Dispose();
+
+            activity.RequestFormPath = "https://whatsapstorage.blob.core.windows.net/whatsap/" + activity.ActivityId + "_" + file.FileName;
+            _context.Update(activity);
+            await _context.SaveChangesAsync();
+
+
+            return RedirectToAction("ActivityRequest", "Client", new { id = activity.ClientId });
+        }
+
+        public async Task<ActionResult> Download()
+        {
+            var filename = "ActivityReqeustForm.docx";
+            CloudBlobContainer container = BlobsController.GetClouldBlobContainer();
+            CloudBlockBlob blob = container.GetBlockBlobReference(filename);
+
+            Stream blobStream = await blob.OpenReadAsync();
+
+            return File(blobStream, blob.Properties.ContentType, filename);
+
+        }
+        private CloudBlobContainer GetCloudBlobContainer()
+        {
+            throw new NotImplementedException();
+        }
+
         public ActionResult BookingList()
         {
             return View();
         }
+
+
     }
 }

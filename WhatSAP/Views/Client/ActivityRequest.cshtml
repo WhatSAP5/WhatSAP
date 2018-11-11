@@ -5,6 +5,9 @@
 
 <h2>ActivityRequest</h2>
 
+<a class="btn btn-primary btn-sm" asp-action="RequestForm">Create new request</a>
+<a class="btn btn-danger btn-sm" asp-action="Download">Download request form</a><br/><br/>
+
 <div>
     <table class="table">
         <thead>
@@ -28,34 +31,35 @@
         <tbody>
             @foreach (var item in Model)
             {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ActivityName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ActivityDate)
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ActivityName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ActivityDate)
 
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Price)
-                </td>
-                @if (item.Authorized == false)
-                {
-                    <td>
-                        Pending
                     </td>
-                }
-                else
-                {
                     <td>
-                        Completed
+                        @Html.DisplayFor(modelItem => item.Price)
                     </td>
-                }
+                    @if (item.Authorized == false)
+                    {
+                        <td>
+                            Pending
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            Completed
+                        </td>
+                    }
                     <td>
                         <a asp-action="ActivityRequestDetail" asp-route-id="@item.ActivityId" asp-controller="Activity">View Details</a>
                     </td>
-            </tr>
+                </tr>
 
             }
         </tbody>
     </table>
+    </div>
