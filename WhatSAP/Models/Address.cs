@@ -16,6 +16,8 @@ namespace WhatSAP.Models
         public string City { get; set; }
         public string Province { get; set; }
         public string PostalCode { get; set; }
+        public decimal Latitude { get; set; }
+        public decimal Longitude { get; set; }
 
         public ICollection<Activity> Activity { get; set; }
     }

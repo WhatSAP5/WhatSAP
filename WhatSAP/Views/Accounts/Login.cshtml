@@ -43,41 +43,6 @@
     </div>
 </div>
 
-@*<div>
-        <form asp-action="Login">
-            <div class="row">
-                <div class="col-md-4">
-                    <div asp-validation-summary="All">    </div>
-
-                    <div class="form-group">
-                        <label asp-for="UserType" class="control-label">User type</label><br/>
-
-                        <input type="radio" asp-for="UserType" value="Client" /> Client
-
-                        <select asp-for="UserType" class="form-control">
-                            <option>Client</option>
-                            <option>Customer</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Email"></label>
-                        <input asp-for="Email" type="email" class="form-control" />
-                        <span asp-validation-for="Email" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Password"></label>
-                        <input type="password" asp-for="Password" class="form-control" />
-                        <span asp-validation-for="Password" class="text-danger"></span>
-                    </div>
-                    <div>
-                        <label>&nbsp;</label>
-                        <button type="submit" class="btn btn-primary">Login</button>
-                        <button class="btn btn-primary">Register</button>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>*@
 @section Scripts {
     @await Html.PartialAsync("_ValidationScriptsPartial")
 }
