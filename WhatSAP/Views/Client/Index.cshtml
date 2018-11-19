@@ -27,17 +27,19 @@
                                 Dashboard <span class="sr-only">(current)</span>
                             </a>
                         </li>
+                        <a class="nav-link" asp-action="ActivityList" asp-route-id="@Model.ClientId">
+                            <span data-feather="file-text"></span>
+                            My activity
+                        </a>
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link" asp-action="ActivityRequest" asp-route-id="@Model.ClientId">
-                            <span data-feather="file-text"></span>
-                            Pending activity list</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <span data-feather="shopping-cart"></span>
-                                Products
+                                <span data-feather="file-text"></span>
+                                Pending activity list
                             </a>
                         </li>
+                        <li class="nav-item">
+
                         <li class="nav-item">
                             <a class="nav-link" href="@Url.Action("BookingList", "Client")">
                                 <span data-feather="users"></span>

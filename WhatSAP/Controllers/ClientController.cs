@@ -61,6 +61,23 @@ namespace WhatSAP.Controllers
             return View(activity);
         }
 
+        public async Task<IActionResult> ActivityList(long? id)
+        {
+            var activity = await _context.Activity
+                .Include(c => c.Address)
+                .Include(c => c.Category)
+                .Include(c => c.Client)
+                .Where(m => m.ClientId == id)
+                .ToArrayAsync();
+
+            if(activity == null)
+            {
+                return NotFound();
+            }
+
+            return View(activity);
+        }
+
         public IActionResult RequestForm()
         {
             Activity activity = new Activity();
@@ -96,7 +113,7 @@ namespace WhatSAP.Controllers
             return RedirectToAction("ActivityRequest", "Client", new { id = activity.ClientId });
         }
 
-        public async Task<ActionResult> Download()
+        private async Task<ActionResult> Download()
         {
             var filename = "ActivityReqeustForm.docx";
             CloudBlobContainer container = BlobsController.GetClouldBlobContainer();
@@ -107,11 +124,7 @@ namespace WhatSAP.Controllers
             return File(blobStream, blob.Properties.ContentType, filename);
 
         }
-        private CloudBlobContainer GetCloudBlobContainer()
-        {
-            throw new NotImplementedException();
-        }
-
+         
         public ActionResult BookingList()
         {
             return View();
