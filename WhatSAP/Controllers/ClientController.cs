@@ -113,7 +113,7 @@ namespace WhatSAP.Controllers
             return RedirectToAction("ActivityRequest", "Client", new { id = activity.ClientId });
         }
 
-        private async Task<ActionResult> Download()
+        public async Task<IActionResult> Download()
         {
             var filename = "ActivityReqeustForm.docx";
             CloudBlobContainer container = BlobsController.GetClouldBlobContainer();
