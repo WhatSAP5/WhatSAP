@@ -27,6 +27,21 @@ namespace WhatSAP.Controllers
         //GET   /Accounts/login
         public IActionResult Login()
         {
+            if (HttpContext.Session.GetString("user") != null)
+            {
+                if (HttpContext.Session.GetString("userType").Equals("Customer"))
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+                else if (HttpContext.Session.GetString("userType").Equals("Client"))
+                {
+                    return RedirectToAction("Index", "Client");
+                }
+                else if (HttpContext.Session.GetString("userType").Equals("Admin"))
+                {
+                    return RedirectToAction("Index", "Admin");
+                }
+            }
             return View(new LoginViewModel());
         }
 
@@ -50,7 +65,7 @@ namespace WhatSAP.Controllers
                             }
                             if (customer.Password.Equals(EncryptionPassword(loginViewModel.Password)))
                             {
-                                HttpContext.Session.SetString("token", loginViewModel.Email);
+                                HttpContext.Session.SetInt32("token", (int)customer.CustomerId);
                                 HttpContext.Session.SetString("user", customer.FirstName + " " + customer.LastName);
                                 HttpContext.Session.SetString("userType", loginViewModel.UserType);
                                 return RedirectToAction("Index", "Home");
@@ -70,10 +85,10 @@ namespace WhatSAP.Controllers
                             }
                             if (client.Password.Equals(EncryptionPassword(loginViewModel.Password)))
                             {
-                                HttpContext.Session.SetString("token", loginViewModel.Email);
+                                HttpContext.Session.SetInt32("token", (int)client.ClientId);
                                 HttpContext.Session.SetString("user", client.FirstName + " " + client.LastName);
                                 HttpContext.Session.SetString("userType", loginViewModel.UserType);
-                                return RedirectToAction("Index", "Home");
+                                return RedirectToAction("Index", "Client", new {id = client.ClientId });
                             }
                             else
                             {
@@ -181,7 +196,7 @@ namespace WhatSAP.Controllers
         {
             return _context.Client.SingleOrDefault(client => client.Email.Equals(email));
         }
-        private string EncryptionPassword(string password)
+        public static string EncryptionPassword(string password)
         {
             MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();
             UTF8Encoding encode = new UTF8Encoding();

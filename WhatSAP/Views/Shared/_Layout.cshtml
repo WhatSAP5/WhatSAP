@@ -5,8 +5,8 @@
     var loginEmail = HttpContextAccessor.HttpContext.Session.GetString("token");
     var user = HttpContextAccessor.HttpContext.Session.GetString("user");
     var userType = HttpContextAccessor.HttpContext.Session.GetString("userType");
-
 }
+
 <html>
 <head>
     <meta charset="utf-8" />
@@ -25,6 +25,7 @@
         <link rel="stylesheet" href="http://whatsap-team05.azurewebsites.net/lib/bootstrap/dist/css/bootstrap-minty.css" />
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
     </environment>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 </head>
 <body>
     @*Navigation Bar*@
@@ -35,29 +36,38 @@
         </a>
         <div class="collapse navbar-collapse" id="navbarColor01">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item active"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="About">About</a></li>
 
-                @*Activity Menu*@
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="true">Activities</a>
-                    <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 40px, 0px); top: 0px; left: 0px; will-change: transform;">
-                        <a class="dropdown-item" asp-area="" asp-controller="Activity" asp-action="Index">Activity List</a>
-                        <a class="dropdown-item" asp-area="" asp-controller="Activity" asp-action="Search">Search Activity</a>
-                        <a class="dropdown-item" asp-area="" asp-controller="Activity" asp-action="Review">Activity Reviews</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Separated link</a>
-                    </div>
-                </li>
-
-                @*TODO: Client Entrance*@
+                @if (user == null || !((userType.Equals("Client")) || userType.Equals("Admin")))
+                {
+                    <li class="nav-item active"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="About">About</a></li>
+                    @*Activity Menu*@
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="true">Activities</a>
+                        <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 40px, 0px); top: 0px; left: 0px; will-change: transform;">
+                            <a class="dropdown-item" asp-area="" asp-controller="Activity" asp-action="Index">Activity List</a>
+                            <a class="dropdown-item" asp-area="" asp-controller="Activity" asp-action="Search">Search Activity</a>
+                            <a class="dropdown-item" asp-area="" asp-controller="Activity" asp-action="Review">Activity Reviews</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Separated link</a>
+                        </div>
+                    </li>
+                }
+                @* Client Entrance*@
                 @if (user != null && userType.Equals("Client"))
                 {
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Client" asp-action="Index">Clients</a>
+                    <li class="nav-item ">
+                        <a class="nav-link" asp-area="" asp-controller="Client" asp-action="Index">Dashboard</a>
                     </li>
                 }
 
+                @* Admin Entrance *@
+                @if (user != null && userType.Equals("Admin"))
+                {
+                    <li class="nav-item ">
+                        <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="Index">Dashboard</a>
+                    </li>
+                }
                 <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
 
             </ul>
@@ -74,25 +84,6 @@
                     <li class="nav-item"> <a class="nav-link active" asp-area="" asp-controller="Accounts" asp-action="Logout">Logout</a></li>
                 }
             </ul>
-
-            @*<ul class="navbar-nav navbar-right">
-                    <li class="nav-item">
-                        <form id="logout" action="@Url.Action("Logout", "Accounts")" method="POST">
-                            <a class="nav-link active" href="javascript: $('#logout').submit()" title="Log out">
-                                Log Out <br />
-                                <span class="tagline">@User.Identity.Name</span>
-                            </a>
-                        </form>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link active" href="@Url.Action("Login", "Accounts")" title="Log in">Log In</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="@Url.Action("Register", "Accounts")" title="Register">Register</a>
-                    </li>
-
-                </ul>*@
         </div>
     </nav>
 
@@ -100,11 +91,58 @@
 
     <div class="container body-content">
         @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; 2018 - WhatSAP</p>
-        </footer>
     </div>
+
+    <!-- Footer -->
+    <footer class="card-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 col-lg-4 col-xl-3">
+                    <h5>About</h5>
+                    <hr class="bg-white mb-2 mt-0 d-inline-block mx-auto w-25">
+                    <p class="mb-0">
+                        Blabla
+                    </p>
+                </div>
+                <div class="col-md-2 col-lg-2 col-xl-2 mx-auto">
+                    <h5>Informations</h5>
+                    <hr class="bg-white mb-2 mt-0 d-inline-block mx-auto w-25">
+                    <ul class="list-unstyled">
+                        <li><a href="">Link 1</a></li>
+                        <li><a href="">Link 2</a></li>
+                        <li><a href="">Link 3</a></li>
+                        <li><a href="">Link 4</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 col-lg-2 col-xl-2 mx-auto">
+                    <h5>Others links</h5>
+                    <hr class="bg-white mb-2 mt-0 d-inline-block mx-auto w-25">
+                    <ul class="list-unstyled">
+                        <li><a href="">Link 1</a></li>
+                        <li><a href="">Link 2</a></li>
+                        <li><a href="">Link 3</a></li>
+                        <li><a href="">Link 4</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 col-lg-3 col-xl-3">
+                    <h5>Contact</h5>
+                    <hr class="bg-white mb-2 mt-0 d-inline-block mx-auto w-25">
+                    <ul class="list-unstyled">
+                        <li><i class="fa fa-home mr-2"></i>WhatSAP</li>
+                        <li><i class="fa fa-envelope mr-2"></i>WhatsapAdmin@whatsap.com</li>
+                        <li><i class="fa fa-phone mr-2"></i> +1 123-1234-1234</li>
+                        <li><i class="fa fa-print mr-2"></i> +1 456-1234-6754</li>
+                        <li><a asp-action="Login" asp-controller="admin">Login to admin</a></li>
+                    </ul>
+                </div>
+                <div class="col-12 copyright mt-3">
+                    <p class="float-left">
+                        <a href="#">Back to top</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
 
     <environment include="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
@@ -137,5 +175,6 @@
     </environment>
 
     @RenderSection("Scripts", required: false)
+
 </body>
 </html>
