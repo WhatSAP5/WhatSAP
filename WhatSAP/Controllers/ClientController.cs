@@ -27,14 +27,13 @@ namespace WhatSAP.Controllers
         // GET: Client
         public async Task<IActionResult> Index(long? id)
         {
-
             if (id == null)
             {
                 return NotFound();
             }
             var client = await _context.Client.Include(c => c.Activity).Include(c => c.Booking)
                 .FirstOrDefaultAsync(m => m.ClientId == id);
-            if(client == null)
+            if (client == null)
             {
                 return NotFound();
             }
@@ -43,7 +42,6 @@ namespace WhatSAP.Controllers
 
         public async Task<IActionResult> ActivityRequest(long? id)
         {
-
             ViewBag.ClientId = id;
 
             var activity = await _context.Activity
@@ -70,7 +68,7 @@ namespace WhatSAP.Controllers
                 .Where(m => m.ClientId == id)
                 .ToArrayAsync();
 
-            if(activity == null)
+            if (activity == null)
             {
                 return NotFound();
             }
@@ -99,9 +97,9 @@ namespace WhatSAP.Controllers
             await _context.SaveChangesAsync();
 
             CloudBlobContainer container = BlobsController.GetClouldBlobContainer();
-            CloudBlockBlob cloudBlockBlob = container.GetBlockBlobReference(activity.ActivityId +"_" + file.FileName);
+            CloudBlockBlob cloudBlockBlob = container.GetBlockBlobReference(activity.ActivityId + "_" + file.FileName);
             var stream = file.OpenReadStream();
-         
+
             await cloudBlockBlob.UploadFromStreamAsync(stream);
             stream.Dispose();
 
@@ -124,12 +122,27 @@ namespace WhatSAP.Controllers
             return File(blobStream, blob.Properties.ContentType, filename);
 
         }
-         
-        public ActionResult BookingList()
+
+        public ActionResult BookingList(long? id)
         {
-            return View();
+            if (id == null)
+                return NotFound();
+
+            var group =
+                from b in _context.Booking
+                join c in _context.Customer on b.CustomerId equals c.CustomerId
+                where b.ClientId == id
+                select new { activity = b.Activity, customer = c, num = b.NumberOfPeople, total = b.Total, bookingDate = b.BookingDate };
+
+            List<BookingVM> bookings = new List<BookingVM>();
+
+            foreach (var g in group)
+            {
+                BookingVM b = new BookingVM(g.activity, g.customer, g.num, g.total, g.bookingDate);
+                bookings.Add(b);
+            }
+
+            return View(bookings);
         }
-
-
     }
 }
