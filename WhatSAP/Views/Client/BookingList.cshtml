@@ -1,7 +1,58 @@
-﻿
+﻿@model IEnumerable<WhatSAP.Models.BookingViewModel>
 @{
-    ViewData["Title"] = "BookingList";
+    ViewData["Title"] = "Booking List";
+    Layout = "_Dashboard";
 }
 
-<h2>BookingList</h2>
+@foreach (var booking in Model.GroupBy(x => x.Activity).Select(grp => new { Activity = grp.Key, Details = grp.ToList() }))
+{
+    <div class="card" style="width:75%">
+        <div class="card-body">
+            <h5 class="card-title">@booking.Activity.ActivityName</h5>
+            <h6 class="card-subtitle">@booking.Activity.ActivityDate</h6>
+            <img class="card-img" src="~/images/activities/@(booking.Activity.Key).jpg" height="200" />
 
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            Customer Name
+                        </th>
+                        <th>
+                            Number of People
+                        </th>
+                        <th>
+                            Total Price
+                        </th>
+                        <th>
+                            Booking Date
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var detail in booking.Details)
+                    {
+                        <tr>
+                            <td>
+                                @detail.Customer.FirstName @detail.Customer.LastName
+                            </td>
+                            <td>
+                                @detail.NumOfPpl people
+                            </td>
+                            <td>
+                                $ @detail.Total
+                            </td>
+                            <td>
+                                @detail.BookingDate
+                            </td>
+                            <td>
+                                <a href="#">Accept</a> | <a href="#">Reject</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}

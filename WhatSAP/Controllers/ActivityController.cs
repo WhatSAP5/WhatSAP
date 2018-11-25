@@ -136,14 +136,12 @@ namespace WhatSAP.Controllers
             {
                 result = result.Where(x => x.CategoryId == categoryId).OrderBy(x => x.Rate);
             }
-            else if (date != null) //TODO: Implement Date Search
+            else if (date != null)
             {
-                result = result.Where(x => x.ActivityDate.Date == date).OrderBy(x => x.Rate);
-            }
-
-            else if (typeId != 0)
+                result = result.Where(x => x.ActivityDate == date).OrderBy(x => x.Rate);
+            } else if(typeId != 0)
             {
-                result = result.Where(x => x.typeId == typeId).OrderBy(x => x.Rate);
+                result = result.Where(x => x.TypeId == typeId).OrderBy(x => x.Rate);
             }
 
             ViewData["Categories"] = (from c in _context.Category
@@ -154,5 +152,50 @@ namespace WhatSAP.Controllers
 
             return View(searchResult);
         }
+
+        [Route("ActivityRequestDetail/{id}")]
+        public ActionResult ActivityRequestDetail(long? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var items = _context.Activity.Where(x => x.ActivityId.Equals(id)).FirstOrDefault();
+
+            if(items == null)
+            {
+                return NotFound();
+            }
+
+            return View(items);
+        }
+
+        
+
+        //[Route("Delete/{id}")]
+        //public async Task<IActionResult> Delete(long? id)
+        //{
+        //    if(id == null) { return NotFound(); }
+
+        //    var activity = await _context.Activity
+        //        .Include(c => c.Address)
+        //        .FirstOrDefaultAsync(m => m.ActivityId == id);
+
+        //    if(activity == null) { return NotFound(); }
+
+        //    return View(activity);
+        //}
+
+        //[HttpDelete, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Delete(long id)
+        //{
+        //    var activity = await _context.Activity.FindAsync(id);
+        //    var clientId = activity.ClientId;
+        //    _context.Activity.Remove(activity);
+        //    await _context.SaveChangesAsync();
+
+        //    return RedirectToAction(nameof(Index));
+        //}
     }
 }

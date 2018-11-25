@@ -4,15 +4,12 @@
     Layout = "_Dashboard";
 }
 
-<h2>ActivityRequest</h2>
-
-<a class="btn btn-primary btn-sm" asp-action="RequestForm">Create new request</a>
-<a class="btn btn-danger btn-sm" asp-action="Download">Download request form</a><br/><br/>
+<h2>My activity</h2>
 
 <div>
-    <table class="table table-hover">
+    <table class="table">
         <thead>
-            <tr class="table-primary">
+            <tr>
                 <th>
                     @Html.DisplayNameFor(model => model.ActivityName)
                 </th>
@@ -56,11 +53,11 @@
                         </td>
                     }
                     <td>
-                        <a asp-action="ActivityRequestDetail" asp-route-id="@item.ActivityId" asp-controller="Activity">View Details</a>
+                        <a asp-action="Details" asp-route-id="@item.ActivityId" asp-controller="Activity">View Details</a>
                     </td>
                 </tr>
 
             }
         </tbody>
     </table>
-    </div>
+</div>

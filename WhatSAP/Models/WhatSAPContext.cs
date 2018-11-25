@@ -29,7 +29,7 @@ namespace WhatSAP.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
                 optionsBuilder.UseSqlServer("Data Source=tcp:whatsap.database.windows.net;database=WhatSAP;Persist Security Info=False;User ID=WhatsapAdmin;Password=Centennial@123;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
             }
         }
@@ -52,20 +52,26 @@ namespace WhatSAP.Models
 
                 entity.Property(e => e.Rate).HasColumnType("decimal(5, 1)");
 
+                entity.Property(e => e.RequestFormPath).HasMaxLength(50);
+
+                entity.Property(e => e.TypeId)
+                    .HasColumnName("typeId")
+                    .HasDefaultValueSql("((1))");
+
                 entity.HasOne(d => d.Address)
                     .WithMany(p => p.Activity)
                     .HasForeignKey(d => d.AddressId)
-                    .HasConstraintName("FK__Activity__Addres__03BB8E22");
+                    .HasConstraintName("FK__Activity__Addres__0C50D423");
 
                 entity.HasOne(d => d.Category)
                     .WithMany(p => p.Activity)
                     .HasForeignKey(d => d.CategoryId)
-                    .HasConstraintName("FK__Activity__Catego__73852659");
+                    .HasConstraintName("FK__Activity__Catego__0D44F85C");
 
                 entity.HasOne(d => d.Client)
                     .WithMany(p => p.Activity)
                     .HasForeignKey(d => d.ClientId)
-                    .HasConstraintName("FK__Activity__Client__756D6ECB");
+                    .HasConstraintName("FK__Activity__Client__0E391C95");
             });
 
             modelBuilder.Entity<Address>(entity =>

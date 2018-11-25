@@ -76,5 +76,13 @@ namespace WhatSAP.Controllers
 
             return -1;
         }
+
+        public IActionResult Checkout(long? id)
+        {
+            List<CartViewModel> cart = SessionHelper.GetObjectFromJson<List<CartViewModel>>(HttpContext.Session, "cart");
+            ViewBag.Cart = cart;
+            ViewBag.Total = cart.Sum(x => x.NumOfPeople * x.Activity.Price) * 1.13;
+            return View();
+        }
     }
 }
