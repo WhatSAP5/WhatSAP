@@ -134,11 +134,11 @@ namespace WhatSAP.Controllers
                 where b.ClientId == id
                 select new { activity = b.Activity, customer = c, num = b.NumberOfPeople, total = b.Total, bookingDate = b.BookingDate };
 
-            List<BookingVM> bookings = new List<BookingVM>();
+            List<BookingViewModel> bookings = new List<BookingViewModel>();
 
             foreach (var g in group)
             {
-                BookingVM b = new BookingVM(g.activity, g.customer, g.num, g.total, g.bookingDate);
+                BookingViewModel b = new BookingViewModel(g.activity, g.customer, g.num, g.total, g.bookingDate);
                 bookings.Add(b);
             }
 
