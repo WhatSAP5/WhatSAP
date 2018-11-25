@@ -66,7 +66,7 @@
                     <a class="btn btn-block btn-outline-success" href="@Url.Action("Index", "Activity")">Looking more Activities</a>
                 </div>
                 <div class="col-sm-12 col-md-6 text-right">
-                    <a class="btn btn-lg btn-block btn-success text-uppercase" href="#">Checkout</a> @*TODO: Implemented Payment*@
+                    <a class="btn btn-lg btn-block btn-success text-uppercase" asp-controller="Cart" asp-action="Checkout" asp-route-id="">Checkout</a> @*TODO: Implemented Payment*@
                 </div>
             </div>
         </div>
