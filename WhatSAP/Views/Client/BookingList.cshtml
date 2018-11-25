@@ -27,29 +27,54 @@
                         <th>
                             Booking Date
                         </th>
-                        <th></th>
+                        <th>
+                            Status
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var detail in booking.Details)
                     {
-                        <tr>
-                            <td>
-                                @detail.Customer.FirstName @detail.Customer.LastName
-                            </td>
-                            <td>
-                                @detail.NumOfPpl people
-                            </td>
-                            <td>
-                                $ @detail.Total
-                            </td>
-                            <td>
-                                @detail.BookingDate
-                            </td>
-                            <td>
-                                <a href="#">Accept</a> | <a href="#">Reject</a>
-                            </td>
-                        </tr>
+                        @if (detail.Confirmed == true)
+                        {
+                            <tr>
+                                <td>
+                                    @detail.Customer.FirstName @detail.Customer.LastName
+                                </td>
+                                <td>
+                                    @detail.NumOfPpl people
+                                </td>
+                                <td>
+                                    $ @detail.Total
+                                </td>
+                                <td>
+                                    @detail.BookingDate
+                                </td>
+                                <td>
+                                    Confirmed
+                                </td>
+                            </tr>
+                        }
+                        else
+                        {
+                            <tr>
+                                <td>
+                                    @detail.Customer.FirstName @detail.Customer.LastName
+                                </td>
+                                <td>
+                                    @detail.NumOfPpl people
+                                </td>
+                                <td>
+                                    $ @detail.Total
+                                </td>
+                                <td>
+                                    @detail.BookingDate
+                                </td>
+                                <td>
+                                    <a asp-controller="Client" asp-action="Confirm" asp-route-id="@detail.BookingId">Accept</a> | <a asp-controller="Client" asp-action="Reject" asp-route-id="@detail.BookingId">Reject</a>
+                                </td>
+                            </tr>
+                        }
                     }
                 </tbody>
             </table>
