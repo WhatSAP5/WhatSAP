@@ -123,7 +123,7 @@ namespace WhatSAP.Controllers
 
         }
 
-        public ActionResult BookingList(long? id)
+        public IActionResult BookingList(long? id)
         {
             if (id == null)
                 return NotFound();
@@ -132,17 +132,35 @@ namespace WhatSAP.Controllers
                 from b in _context.Booking
                 join c in _context.Customer on b.CustomerId equals c.CustomerId
                 where b.ClientId == id
-                select new { activity = b.Activity, customer = c, num = b.NumberOfPeople, total = b.Total, bookingDate = b.BookingDate };
+                select new { bookingId = b.BookingId, activity = b.Activity, customer = c, num = b.NumberOfPeople, total = b.Total, bookingDate = b.BookingDate, confirmed = b.Confirmed };
 
-            List<BookingVM> bookings = new List<BookingVM>();
+            List<BookingViewModel> bookings = new List<BookingViewModel>();
 
             foreach (var g in group)
             {
-                BookingVM b = new BookingVM(g.activity, g.customer, g.num, g.total, g.bookingDate);
+                BookingViewModel b = new BookingViewModel(g.bookingId, g.activity, g.customer, g.num, g.total, g.bookingDate, g.confirmed);
                 bookings.Add(b);
             }
 
             return View(bookings);
+        }
+
+        public async Task<IActionResult> Confirm(long id)
+        {
+            var booking = _context.Booking.FirstOrDefault(x => x.BookingId == id);
+            booking.Confirmed = true;
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("BookingList", new { id = booking.ClientId });
+        }
+
+        public async Task<IActionResult> Reject(long id)
+        {
+            var booking = _context.Booking.FirstOrDefault(x => x.BookingId == id);
+            _context.Booking.Remove(booking);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("BookingList", new { id = booking.ClientId });
         }
     }
 }
