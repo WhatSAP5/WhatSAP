@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace WhatSAP.Models
 {
-    public class BookingVM
+    public class BookingViewModel
     {
         public Activity Activity { get; set; }
         public Customer Customer { get; set; }
@@ -13,12 +13,12 @@ namespace WhatSAP.Models
         public double Total { get; set; }
         public DateTime BookingDate { get; set; }
 
-        public BookingVM() {
+        public BookingViewModel() {
             Activity = new Activity();
             Customer = new Customer();
         }
 
-        public BookingVM(Activity activity, Customer customer, int num, double total, DateTime bookingDate)
+        public BookingViewModel(Activity activity, Customer customer, int num, double total, DateTime bookingDate)
         {
             Activity = activity;
             Customer = customer;
