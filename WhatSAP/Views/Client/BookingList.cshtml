@@ -1,6 +1,7 @@
 ﻿@model IEnumerable<WhatSAP.Models.BookingVM>
 @{
     ViewData["Title"] = "Booking List";
+    Layout = "_Dashboard";
 }
 
 @foreach (var booking in Model.GroupBy(x => x.Activity).Select(grp => new { Activity = grp.Key, Details = grp.ToList() }))
