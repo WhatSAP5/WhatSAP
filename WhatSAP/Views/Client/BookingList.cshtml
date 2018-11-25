@@ -6,7 +6,7 @@
 
 @foreach (var booking in Model.GroupBy(x => x.Activity).Select(grp => new { Activity = grp.Key, Details = grp.ToList() }))
 {
-    <div class="card" style="width:75%">
+    <div class="card" style="width:75%; margin:10px">
         <div class="card-body">
             <h5 class="card-title">@booking.Activity.ActivityName</h5>
             <h6 class="card-subtitle">@booking.Activity.ActivityDate</h6>
