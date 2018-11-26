@@ -52,7 +52,7 @@ namespace WhatSAP.Models
 
                 entity.Property(e => e.Rate).HasColumnType("decimal(5, 1)");
 
-                entity.Property(e => e.RequestFormPath).HasMaxLength(50);
+                entity.Property(e => e.RequestFormPath).HasMaxLength(100);
 
                 entity.Property(e => e.TypeId)
                     .HasColumnName("typeId")
@@ -162,6 +162,11 @@ namespace WhatSAP.Models
                     .HasMaxLength(300);
 
                 entity.Property(e => e.Rate).HasColumnType("decimal(5, 1)");
+
+                entity.HasOne(d => d.Activity)
+                    .WithMany(p => p.Comment)
+                    .HasForeignKey(d => d.ActivityId)
+                    .HasConstraintName("FK__Comment__Activit__19AACF41");
 
                 entity.HasOne(d => d.Customer)
                     .WithMany(p => p.Comment)

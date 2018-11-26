@@ -81,7 +81,8 @@ namespace WhatSAP.Controllers
         public IActionResult Details(long id)
         {
             var activity = _context.Activity.FirstOrDefault(x => x.ActivityId == id);
-
+            var comment = _context.Comment.Where(x => x.ActivityId.Equals(id)).Include(c=>c.Customer).
+                ToList();
             if (activity == null)
             {
                 return NotFound();
