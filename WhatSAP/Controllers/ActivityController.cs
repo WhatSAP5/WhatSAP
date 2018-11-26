@@ -88,11 +88,11 @@ namespace WhatSAP.Controllers
             }
 
             var address = _context.Address.FirstOrDefault(x => x.AddressId == activity.AddressId);
-            ViewBag.Address2 = address.Address2;
+            ViewBag.Address = address.Address2;
             ViewBag.Latitude = address.Latitude;
             ViewBag.Longitude = address.Longitude;
             ViewBag.ClientEmail = _context.Client.FirstOrDefault(x => x.ClientId == activity.ClientId).Email;
-            
+
             return View(activity);
         }
 
@@ -160,33 +160,5 @@ namespace WhatSAP.Controllers
 
             return View(items);
         }
-
-        
-
-        //[Route("Delete/{id}")]
-        //public async Task<IActionResult> Delete(long? id)
-        //{
-        //    if(id == null) { return NotFound(); }
-
-        //    var activity = await _context.Activity
-        //        .Include(c => c.Address)
-        //        .FirstOrDefaultAsync(m => m.ActivityId == id);
-
-        //    if(activity == null) { return NotFound(); }
-
-        //    return View(activity);
-        //}
-
-        //[HttpDelete, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Delete(long id)
-        //{
-        //    var activity = await _context.Activity.FindAsync(id);
-        //    var clientId = activity.ClientId;
-        //    _context.Activity.Remove(activity);
-        //    await _context.SaveChangesAsync();
-
-        //    return RedirectToAction(nameof(Index));
-        //}
     }
 }
