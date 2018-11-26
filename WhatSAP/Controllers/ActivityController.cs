@@ -39,9 +39,6 @@ namespace WhatSAP.Controllers
             ViewBag.HasNextPage = nextPage <= totalPages;
             ViewBag.PreviousPageIsEllipsis = false;
 
-            //var activity = from ac in _context.Activity
-            //               select ac;
-
             IEnumerable<Activity> activity = _context.Activity;
 
             switch (sortBy)
@@ -79,7 +76,7 @@ namespace WhatSAP.Controllers
             return View();
         }
 
-        // GET: Activity/Details/5
+        // Activity/Details/5
         [Route("details/{id}")]
         public IActionResult Details(long id)
         {
@@ -91,19 +88,13 @@ namespace WhatSAP.Controllers
             }
 
             var address = _context.Address.FirstOrDefault(x => x.AddressId == activity.AddressId);
-            ViewBag.Address = address.Address2;
+            ViewBag.Address2 = address.Address2;
             ViewBag.Latitude = address.Latitude;
             ViewBag.Longitude = address.Longitude;
-
+            ViewBag.ClientEmail = _context.Client.FirstOrDefault(x => x.ClientId == activity.ClientId).Email;
+            
             return View(activity);
         }
-
-        /*
-        private bool ActivityExists(long id)
-        {
-            return _context.Activity.Any(e => e.ActivityId == id);
-        }
-        */
 
         [HttpGet, Route("search")]
         public IActionResult Search()
