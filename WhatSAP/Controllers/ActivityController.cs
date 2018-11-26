@@ -160,33 +160,5 @@ namespace WhatSAP.Controllers
 
             return View(items);
         }
-
-        
-
-        //[Route("Delete/{id}")]
-        //public async Task<IActionResult> Delete(long? id)
-        //{
-        //    if(id == null) { return NotFound(); }
-
-        //    var activity = await _context.Activity
-        //        .Include(c => c.Address)
-        //        .FirstOrDefaultAsync(m => m.ActivityId == id);
-
-        //    if(activity == null) { return NotFound(); }
-
-        //    return View(activity);
-        //}
-
-        //[HttpDelete, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Delete(long id)
-        //{
-        //    var activity = await _context.Activity.FindAsync(id);
-        //    var clientId = activity.ClientId;
-        //    _context.Activity.Remove(activity);
-        //    await _context.SaveChangesAsync();
-
-        //    return RedirectToAction(nameof(Index));
-        //}
     }
 }
