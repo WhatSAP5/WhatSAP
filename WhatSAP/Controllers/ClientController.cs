@@ -27,14 +27,13 @@ namespace WhatSAP.Controllers
         // GET: Client
         public async Task<IActionResult> Index(long? id)
         {
-
             if (id == null)
             {
                 return NotFound();
             }
             var client = await _context.Client.Include(c => c.Activity).Include(c => c.Booking)
                 .FirstOrDefaultAsync(m => m.ClientId == id);
-            if(client == null)
+            if (client == null)
             {
                 return NotFound();
             }
@@ -43,7 +42,6 @@ namespace WhatSAP.Controllers
 
         public async Task<IActionResult> ActivityRequest(long? id)
         {
-
             ViewBag.ClientId = id;
 
             var activity = await _context.Activity
@@ -58,6 +56,23 @@ namespace WhatSAP.Controllers
             {
                 return NotFound();
             }
+            return View(activity);
+        }
+
+        public async Task<IActionResult> ActivityList(long? id)
+        {
+            var activity = await _context.Activity
+                .Include(c => c.Address)
+                .Include(c => c.Category)
+                .Include(c => c.Client)
+                .Where(m => m.ClientId == id)
+                .ToArrayAsync();
+
+            if (activity == null)
+            {
+                return NotFound();
+            }
+
             return View(activity);
         }
 
@@ -82,9 +97,9 @@ namespace WhatSAP.Controllers
             await _context.SaveChangesAsync();
 
             CloudBlobContainer container = BlobsController.GetClouldBlobContainer();
-            CloudBlockBlob cloudBlockBlob = container.GetBlockBlobReference(activity.ActivityId +"_" + file.FileName);
+            CloudBlockBlob cloudBlockBlob = container.GetBlockBlobReference(activity.ActivityId + "_" + file.FileName);
             var stream = file.OpenReadStream();
-         
+
             await cloudBlockBlob.UploadFromStreamAsync(stream);
             stream.Dispose();
 
@@ -96,7 +111,7 @@ namespace WhatSAP.Controllers
             return RedirectToAction("ActivityRequest", "Client", new { id = activity.ClientId });
         }
 
-        public async Task<ActionResult> Download()
+        public async Task<IActionResult> Download()
         {
             var filename = "ActivityReqeustForm.docx";
             CloudBlobContainer container = BlobsController.GetClouldBlobContainer();
@@ -107,16 +122,45 @@ namespace WhatSAP.Controllers
             return File(blobStream, blob.Properties.ContentType, filename);
 
         }
-        private CloudBlobContainer GetCloudBlobContainer()
+
+        public IActionResult BookingList(long? id)
         {
-            throw new NotImplementedException();
+            if (id == null)
+                return NotFound();
+
+            var group =
+                from b in _context.Booking
+                join c in _context.Customer on b.CustomerId equals c.CustomerId
+                where b.ClientId == id
+                select new { bookingId = b.BookingId, activity = b.Activity, customer = c, num = b.NumberOfPeople, total = b.Total, bookingDate = b.BookingDate, confirmed = b.Confirmed };
+
+            List<BookingViewModel> bookings = new List<BookingViewModel>();
+
+            foreach (var g in group)
+            {
+                BookingViewModel b = new BookingViewModel(g.bookingId, g.activity, g.customer, g.num, g.total, g.bookingDate, g.confirmed);
+                bookings.Add(b);
+            }
+
+            return View(bookings);
         }
 
-        public ActionResult BookingList()
+        public async Task<IActionResult> Confirm(long id)
         {
-            return View();
+            var booking = _context.Booking.FirstOrDefault(x => x.BookingId == id);
+            booking.Confirmed = true;
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("BookingList", new { id = booking.ClientId });
         }
 
+        public async Task<IActionResult> Reject(long id)
+        {
+            var booking = _context.Booking.FirstOrDefault(x => x.BookingId == id);
+            _context.Booking.Remove(booking);
+            await _context.SaveChangesAsync();
 
+            return RedirectToAction("BookingList", new { id = booking.ClientId });
+        }
     }
 }

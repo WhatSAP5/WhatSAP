@@ -84,7 +84,8 @@ namespace WhatSAP.Controllers
         public IActionResult Details(long id)
         {
             var activity = _context.Activity.FirstOrDefault(x => x.ActivityId == id);
-
+            var comment = _context.Comment.Where(x => x.ActivityId.Equals(id)).Include(c=>c.Customer).
+                ToList();
             if (activity == null)
             {
                 return NotFound();
@@ -136,12 +137,13 @@ namespace WhatSAP.Controllers
             {
                 result = result.Where(x => x.CategoryId == categoryId).OrderBy(x => x.Rate);
             }
-            else if (date != null) //TODO: Implement Date Search
+            else if (date != null)
             {
                 result = result.Where(x => x.ActivityDate == date).OrderBy(x => x.Rate);
+            } else if(typeId != 0)
+            {
+                result = result.Where(x => x.TypeId == typeId).OrderBy(x => x.Rate);
             }
-
-    
 
             ViewData["Categories"] = (from c in _context.Category
                                       select c).ToList();

@@ -11,6 +11,7 @@ namespace WhatSAP.Models
         public long? CustomerId { get; set; }
         public long? ActivityId { get; set; }
 
+        public Activity Activity { get; set; }
         public Customer Customer { get; set; }
     }
 }
