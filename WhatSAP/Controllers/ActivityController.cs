@@ -39,7 +39,8 @@ namespace WhatSAP.Controllers
             ViewBag.HasNextPage = nextPage <= totalPages;
             ViewBag.PreviousPageIsEllipsis = false;
 
-            IEnumerable<Activity> activity = _context.Activity;
+
+            IEnumerable<Activity> activity = _context.Activity.Include(c=>c.Comment);
 
             switch (sortBy)
             {

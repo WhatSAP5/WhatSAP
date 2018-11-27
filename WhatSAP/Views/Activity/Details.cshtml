@@ -13,6 +13,8 @@
         user = HttpContextAccessor.HttpContext.Session.GetString("user");
         userType = HttpContextAccessor.HttpContext.Session.GetString("userType");
     }
+
+    var index = 1;
 }
 
 @*Map Css*@
@@ -163,9 +165,9 @@
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBJrDYD9WP6AYhqXoYC07B8idcHEO13rNc&callback=initMap"
             async defer></script>
 
-
+    <hr/>
     <div>
-        <h4>Comment</h4>
+        <h4>Leave your comment</h4>
         <partial name="~/Views/Activity/_comment.cshtml"
                  model="new WhatSAP.Models.Comment() {
     ActivityId = Model.ActivityId,
@@ -176,7 +178,7 @@
                 <thead>
                     <tr>
                         <th>
-                            ID
+                            No.
                         </th>
                         <th>
                             Content
@@ -184,30 +186,37 @@
                         <th>
                             User
                         </th>
-
+                        <th>
+                            Rate
+                        </th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var item in Model.Comment)
                     {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.CommentId)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Body)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Customer.Email)
-
-                            <td>
-                                @if (sessionToken.Equals((int)item.CustomerId) || (sessionToken.Equals(Model.ClientId) && userType.Equals("Client")))
-                                {
-                                    <a asp-action="Delete" asp-controller="Comment" asp-route-id="@item.CommentId">Delete</a>
-                                }
-                            </td>
-                        </tr>
+                    <tr>
+                        <td>
+                            @index
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Body)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Customer.Email)
+                        </td>
+                        <td>
+                            @item.Rate / 5.0
+                        </td>
+                        <td>
+                            @if (sessionToken.Equals((int)item.CustomerId) || (sessionToken.Equals(Model.ClientId) && userType.Equals("Client")))
+                            {
+                                //TODO: Should fix delete function
+                                @*<a asp-action="Delete" asp-controller="Comment" asp-route-id="@item.CommentId">Delete</a>*@
+                            }
+                        </td>
+                    </tr>
+                        index++;
                     }
                 </tbody>
             </table>
