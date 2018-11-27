@@ -42,7 +42,31 @@ namespace WhatSAP.Controllers
             //var activity = from ac in _context.Activity
             //               select ac;
 
-            IEnumerable<Activity> activity = _context.Activity;
+            IEnumerable<Activity> activity = _context.Activity.Include(c=>c.Comment);
+            double average = 0.0;
+            
+            foreach(Activity item in activity)
+            {
+                if (item.Comment.Any())
+                {
+                    foreach (Comment i in item.Comment)
+                    {
+                        if(i.Rate == null)
+                        {
+                            
+                        }
+                        else
+                        {
+                            average += (double)i.Rate;
+                        }
+
+                    }
+                    average = average / item.Comment.Count;
+                    ViewBag.Average = average;
+
+                }
+
+            }
 
             switch (sortBy)
             {

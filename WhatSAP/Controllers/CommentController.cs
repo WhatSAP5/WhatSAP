@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using WhatSAP.Models;
 
 namespace WhatSAP.Controllers
@@ -43,6 +44,7 @@ namespace WhatSAP.Controllers
             }
             return View(comment);
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
