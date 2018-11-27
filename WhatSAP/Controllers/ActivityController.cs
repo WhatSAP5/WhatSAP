@@ -90,7 +90,7 @@ namespace WhatSAP.Controllers
             }
 
             var address = _context.Address.FirstOrDefault(x => x.AddressId == activity.AddressId);
-            ViewBag.Address = address.Address2;
+            ViewBag.Address2 = address.Address2;
             ViewBag.Latitude = address.Latitude;
             ViewBag.Longitude = address.Longitude;
             ViewBag.ClientEmail = _context.Client.FirstOrDefault(x => x.ClientId == activity.ClientId).Email;
