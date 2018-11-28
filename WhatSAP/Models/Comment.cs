@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace WhatSAP.Models
 {
@@ -11,6 +12,7 @@ namespace WhatSAP.Models
         public long? CustomerId { get; set; }
         public long? ActivityId { get; set; }
 
+        public Activity Activity { get; set; }
         public Customer Customer { get; set; }
     }
 }

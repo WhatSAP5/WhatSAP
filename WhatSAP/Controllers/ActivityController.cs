@@ -39,10 +39,8 @@ namespace WhatSAP.Controllers
             ViewBag.HasNextPage = nextPage <= totalPages;
             ViewBag.PreviousPageIsEllipsis = false;
 
-            //var activity = from ac in _context.Activity
-            //               select ac;
 
-            IEnumerable<Activity> activity = _context.Activity;
+            IEnumerable<Activity> activity = _context.Activity.Include(c=>c.Comment);
 
             switch (sortBy)
             {
@@ -79,12 +77,13 @@ namespace WhatSAP.Controllers
             return View();
         }
 
-        // GET: Activity/Details/5
+        // Activity/Details/5
         [Route("details/{id}")]
         public IActionResult Details(long id)
         {
             var activity = _context.Activity.FirstOrDefault(x => x.ActivityId == id);
-
+            var comment = _context.Comment.Where(x => x.ActivityId.Equals(id)).Include(c=>c.Customer).
+                ToList();
             if (activity == null)
             {
                 return NotFound();
@@ -94,16 +93,10 @@ namespace WhatSAP.Controllers
             ViewBag.Address = address.Address2;
             ViewBag.Latitude = address.Latitude;
             ViewBag.Longitude = address.Longitude;
+            ViewBag.ClientEmail = _context.Client.FirstOrDefault(x => x.ClientId == activity.ClientId).Email;
 
             return View(activity);
         }
-
-        /*
-        private bool ActivityExists(long id)
-        {
-            return _context.Activity.Any(e => e.ActivityId == id);
-        }
-        */
 
         [HttpGet, Route("search")]
         public IActionResult Search()
@@ -169,33 +162,5 @@ namespace WhatSAP.Controllers
 
             return View(items);
         }
-
-        
-
-        //[Route("Delete/{id}")]
-        //public async Task<IActionResult> Delete(long? id)
-        //{
-        //    if(id == null) { return NotFound(); }
-
-        //    var activity = await _context.Activity
-        //        .Include(c => c.Address)
-        //        .FirstOrDefaultAsync(m => m.ActivityId == id);
-
-        //    if(activity == null) { return NotFound(); }
-
-        //    return View(activity);
-        //}
-
-        //[HttpDelete, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Delete(long id)
-        //{
-        //    var activity = await _context.Activity.FindAsync(id);
-        //    var clientId = activity.ClientId;
-        //    _context.Activity.Remove(activity);
-        //    await _context.SaveChangesAsync();
-
-        //    return RedirectToAction(nameof(Index));
-        //}
     }
 }

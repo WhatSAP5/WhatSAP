@@ -13,6 +13,7 @@ namespace WhatSAP.Models
         public long? ClientId { get; set; }
         public long? ActivityId { get; set; }
         public long? PaymentId { get; set; }
+        public bool Confirmed { get; set; }
 
         public Activity Activity { get; set; }
         public Client Client { get; set; }
