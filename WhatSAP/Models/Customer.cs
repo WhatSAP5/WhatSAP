@@ -9,6 +9,8 @@ namespace WhatSAP.Models
         {
             Booking = new HashSet<Booking>();
             Comment = new HashSet<Comment>();
+            Payment = new HashSet<Payment>();
+            PaymentMethod = new HashSet<PaymentMethod>();
         }
 
         public long CustomerId { get; set; }
@@ -19,5 +21,7 @@ namespace WhatSAP.Models
 
         public ICollection<Booking> Booking { get; set; }
         public ICollection<Comment> Comment { get; set; }
+        public ICollection<Payment> Payment { get; set; }
+        public ICollection<PaymentMethod> PaymentMethod { get; set; }
     }
 }

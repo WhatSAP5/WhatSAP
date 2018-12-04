@@ -24,13 +24,14 @@ namespace WhatSAP.Models
         public virtual DbSet<Comment> Comment { get; set; }
         public virtual DbSet<Customer> Customer { get; set; }
         public virtual DbSet<Payment> Payment { get; set; }
+        public virtual DbSet<PaymentMethod> PaymentMethod { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Data Source=tcp:whatsap.database.windows.net;database=WhatSAP;Persist Security Info=False;User ID=WhatsapAdmin;Password=Centennial@123;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+                optionsBuilder.UseSqlServer("Server=tcp:whatsap.database.windows.net,1433;Initial Catalog=WhatSAP;Persist Security Info=False;User ID=WhatsapAdmin;Password=Centennial@123;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
             }
         }
 
@@ -122,11 +123,6 @@ namespace WhatSAP.Models
                     .WithMany(p => p.Booking)
                     .HasForeignKey(d => d.CustomerId)
                     .HasConstraintName("FK__Booking__Custome__5224328E");
-
-                entity.HasOne(d => d.Payment)
-                    .WithMany(p => p.Booking)
-                    .HasForeignKey(d => d.PaymentId)
-                    .HasConstraintName("FK__Booking__Payment__55009F39");
             });
 
             modelBuilder.Entity<Category>(entity =>
@@ -191,6 +187,43 @@ namespace WhatSAP.Models
                 entity.Property(e => e.Password)
                     .IsRequired()
                     .HasMaxLength(200);
+            });
+
+            modelBuilder.Entity<Payment>(entity =>
+            {
+                entity.HasOne(d => d.Customer)
+                    .WithMany(p => p.Payment)
+                    .HasForeignKey(d => d.CustomerId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Payment__Custome__373B3228");
+            });
+
+            modelBuilder.Entity<PaymentMethod>(entity =>
+            {
+                entity.HasKey(e => e.MethodCode);
+
+                entity.Property(e => e.MethodCode).ValueGeneratedNever();
+
+                entity.Property(e => e.CardNumber)
+                    .IsRequired()
+                    .HasMaxLength(16)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Cvv)
+                    .IsRequired()
+                    .HasColumnName("CVV")
+                    .HasMaxLength(3)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.NameOnCard)
+                    .IsRequired()
+                    .HasMaxLength(128);
+
+                entity.HasOne(d => d.Customer)
+                    .WithMany(p => p.PaymentMethod)
+                    .HasForeignKey(d => d.CustomerId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__PaymentMe__Custo__382F5661");
             });
         }
     }
