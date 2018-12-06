@@ -5,15 +5,13 @@ namespace WhatSAP.Models
 {
     public partial class Payment
     {
-        public Payment()
-        {
-            Booking = new HashSet<Booking>();
-        }
-
         public long PaymentId { get; set; }
-        public bool PaymentState { get; set; }
-        public DateTime? PaymentDate { get; set; }
+        public long CustomerId { get; set; }
+        public long MethodCode { get; set; }
+        public DateTime PaymentDate { get; set; }
+        public double PaymentAmount { get; set; }
+        public double DiscountAmount { get; set; }
 
-        public ICollection<Booking> Booking { get; set; }
+        public Customer Customer { get; set; }
     }
 }
