@@ -47,6 +47,8 @@ namespace WhatSAP.Models
                     .IsRequired()
                     .HasMaxLength(300);
 
+                entity.Property(e => e.IsActive).HasDefaultValueSql("((1))");
+
                 entity.Property(e => e.Key)
                     .HasMaxLength(4000)
                     .HasComputedColumnSql("((lower(replace([ActivityName],' ',''))+'-')+CONVERT([nvarchar](10),[ActivityDate],(23)))");
@@ -223,7 +225,7 @@ namespace WhatSAP.Models
                     .WithMany(p => p.PaymentMethod)
                     .HasForeignKey(d => d.CustomerId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__PaymentMe__Custo__382F5661");
+                    .HasConstraintName("FK__PaymentMe__Custo__3B0BC30C");
             });
         }
     }

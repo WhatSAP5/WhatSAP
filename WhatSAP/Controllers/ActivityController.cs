@@ -41,7 +41,10 @@ namespace WhatSAP.Controllers
             ViewBag.PreviousPageIsEllipsis = false;
 
 
-            IEnumerable<Activity> activity = _context.Activity.Include(c=>c.Comment);
+            IEnumerable<Activity> activity = _context.Activity
+                                                .Include(c => c.Comment)
+                                                .Where(m => m.IsActive == true)
+                                                .Where(m => m.Authorized == true);
 
             switch (sortBy)
             {
@@ -222,5 +225,60 @@ namespace WhatSAP.Controllers
             }
             return RedirectToAction("ActivityList", "Client", new { id = activity.ClientId });
         }
+        [HttpGet, Route("inactive/{id}")]
+        public async Task<IActionResult> Inactive(long id)
+        {
+            if (id == null)
+            {
+                NotFound();
+            }
+
+            var activity = await _context.Activity
+                .Include(c => c.Address)
+                .Include(c => c.Category)
+                .Include(c => c.Client)
+                .FirstOrDefaultAsync(m => m.ActivityId.Equals(id));
+
+            if (activity == null)
+            {
+                NotFound();
+            }
+            return View(activity);
+        }
+
+        [HttpPost, Route("inactive/{id}")]
+        public async Task<IActionResult> Inactive(long id, bool isActivte = false)
+        {
+            if (id == null)
+            {
+                NotFound();
+            }
+
+            var activity = await _context.Activity
+                .Include(c => c.Address)
+                .Include(c => c.Category)
+                .Include(c => c.Client)
+                .FirstOrDefaultAsync(m => m.ActivityId.Equals(id));
+
+            if (activity == null)
+            {
+                NotFound();
+            }
+
+            activity.IsActive = !activity.IsActive;
+
+            try
+            {
+                _context.Activity.Update(activity);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
+
+            return RedirectToAction("ActivityList", "Client", new { id = activity.ClientId });
+        }
+
     }
 }
