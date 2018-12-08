@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WhatSAP.Models;
 
@@ -161,6 +162,65 @@ namespace WhatSAP.Controllers
             }
 
             return View(items);
+        }
+
+        [HttpGet, Route("edit/{id}")]
+        public async Task<IActionResult> Edit(long id)
+        {
+            if(id == null)
+            {
+                NotFound();
+            }
+
+            var activity = await _context.Activity
+                .Include(c => c.Address)
+                .Include(c => c.Category)
+                .Include(c => c.Client)
+                .FirstOrDefaultAsync(m => m.ActivityId.Equals(id));
+
+            if (activity == null)
+            {
+                NotFound();
+            }
+            ViewData["CategoryId"] = new SelectList(_context.Category, "CategoryId", "CategoryName");
+            return View(activity);
+        }
+
+        [HttpPost, Route("edit/{id}")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(long id, [Bind("ActivityId,ActivityName,Description,CategoryId,ClientId, ActivityDate,Price,Capacity,typeId")]Activity newActivity)
+        {
+            ViewData["CategoryId"] = new SelectList(_context.Category, "CategoryId", "CategoryName", newActivity.CategoryId);
+            var activity = await _context.Activity
+                    .Include(c => c.Address)
+                    .Include(c => c.Category)
+                    .Include(c => c.Client)
+                    .FirstOrDefaultAsync(m => m.ActivityId.Equals(id));
+
+            activity.ActivityName = newActivity.ActivityName;
+            activity.Description = newActivity.Description;
+            activity.CategoryId = newActivity.CategoryId;
+            activity.Category = newActivity.Category;
+            activity.ActivityDate = newActivity.ActivityDate;
+            activity.Price = newActivity.Price;
+            activity.Capacity = newActivity.Capacity;
+            if (id != newActivity.ActivityId)
+            {
+                return NotFound();
+            }
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Activity.Update(activity);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    throw;
+                }
+            }
+            return RedirectToAction("ActivityList", "Client", new { id = activity.ClientId });
         }
     }
 }

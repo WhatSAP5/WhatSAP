@@ -52,9 +52,12 @@
                             Completed
                         </td>
                     }
-                    <td>
-                        <a asp-action="Details" asp-route-id="@item.ActivityId" asp-controller="Activity">View Details</a>
-                    </td>
+                        <td>
+                            <a asp-action="Details" asp-route-id="@item.ActivityId" asp-controller="Activity">View Details</a> |
+                            <a asp-action="Edit" asp-route-id="@item.ActivityId" asp-controller="Activity">Edit Activity</a> |
+                            <a asp-action="Inactive" asp-route-id="@item.ActivityId" asp-controller="Activity">Inactive this Activity</a>
+
+                        </td>
                 </tr>
 
             }
