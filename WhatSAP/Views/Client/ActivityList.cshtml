@@ -23,39 +23,61 @@
                 <th>
                     @Html.DisplayNameFor(model => model.Authorized)
                 </th>
+                <th>
+                    Active
+                </th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model)
             {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ActivityName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ActivityDate)
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ActivityName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ActivityDate)
 
-                    </td>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                @if (item.Authorized == false)
+                {
                     <td>
-                        @Html.DisplayFor(modelItem => item.Price)
+                        Pending
                     </td>
-                    @if (item.Authorized == false)
+                }
+                else
+                {
+                    <td>
+                        Completed
+                    </td>
+                }
+                @if (item.IsActive == true)
+                {
+                    <td>Active</td>
+                }
+                else
+                {
+                    <td>Inactive</td>
+                }
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.ActivityId" asp-controller="Activity">View Details</a> |
+                    <a asp-action="Edit" asp-route-id="@item.ActivityId" asp-controller="Activity">Edit Activity</a> |
+                    @if (item.IsActive == true)
                     {
-                        <td>
-                            Pending
-                        </td>
+                        <a asp-action="Inactive" asp-route-id="@item.ActivityId" asp-controller="Activity">Inactive this Activity</a>
                     }
                     else
                     {
-                        <td>
-                            Completed
-                        </td>
+                        <a asp-action="Inactive" asp-route-id="@item.ActivityId" asp-controller="Activity">Active this Activity</a>
+
                     }
-                    <td>
-                        <a asp-action="Details" asp-route-id="@item.ActivityId" asp-controller="Activity">View Details</a>
-                    </td>
-                </tr>
+
+                </td>
+            </tr>
 
             }
         </tbody>

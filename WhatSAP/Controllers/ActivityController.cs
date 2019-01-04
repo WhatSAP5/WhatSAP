@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WhatSAP.Models;
 
@@ -39,10 +40,11 @@ namespace WhatSAP.Controllers
             ViewBag.HasNextPage = nextPage <= totalPages;
             ViewBag.PreviousPageIsEllipsis = false;
 
-            //var activity = from ac in _context.Activity
-            //               select ac;
 
-            IEnumerable<Activity> activity = _context.Activity;
+            IEnumerable<Activity> activity = _context.Activity
+                                                .Include(c => c.Comment)
+                                                .Where(m => m.IsActive == true)
+                                                .Where(m => m.Authorized == true);
 
             switch (sortBy)
             {
@@ -79,7 +81,7 @@ namespace WhatSAP.Controllers
             return View();
         }
 
-        // GET: Activity/Details/5
+        // Activity/Details/5
         [Route("details/{id}")]
         public IActionResult Details(long id)
         {
@@ -95,16 +97,10 @@ namespace WhatSAP.Controllers
             ViewBag.Address = address.Address2;
             ViewBag.Latitude = address.Latitude;
             ViewBag.Longitude = address.Longitude;
+            ViewBag.ClientEmail = _context.Client.FirstOrDefault(x => x.ClientId == activity.ClientId).Email;
 
             return View(activity);
         }
-
-        /*
-        private bool ActivityExists(long id)
-        {
-            return _context.Activity.Any(e => e.ActivityId == id);
-        }
-        */
 
         [HttpGet, Route("search")]
         public IActionResult Search()
@@ -171,32 +167,118 @@ namespace WhatSAP.Controllers
             return View(items);
         }
 
-        
+        [HttpGet, Route("edit/{id}")]
+        public async Task<IActionResult> Edit(long id)
+        {
+            if(id == null)
+            {
+                NotFound();
+            }
 
-        //[Route("Delete/{id}")]
-        //public async Task<IActionResult> Delete(long? id)
-        //{
-        //    if(id == null) { return NotFound(); }
+            var activity = await _context.Activity
+                .Include(c => c.Address)
+                .Include(c => c.Category)
+                .Include(c => c.Client)
+                .FirstOrDefaultAsync(m => m.ActivityId.Equals(id));
 
-        //    var activity = await _context.Activity
-        //        .Include(c => c.Address)
-        //        .FirstOrDefaultAsync(m => m.ActivityId == id);
+            if (activity == null)
+            {
+                NotFound();
+            }
+            ViewData["CategoryId"] = new SelectList(_context.Category, "CategoryId", "CategoryName");
+            return View(activity);
+        }
 
-        //    if(activity == null) { return NotFound(); }
+        [HttpPost, Route("edit/{id}")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(long id, [Bind("ActivityId,ActivityName,Description,CategoryId,ClientId, ActivityDate,Price,Capacity,typeId")]Activity newActivity)
+        {
+            ViewData["CategoryId"] = new SelectList(_context.Category, "CategoryId", "CategoryName", newActivity.CategoryId);
+            var activity = await _context.Activity
+                    .Include(c => c.Address)
+                    .Include(c => c.Category)
+                    .Include(c => c.Client)
+                    .FirstOrDefaultAsync(m => m.ActivityId.Equals(id));
 
-        //    return View(activity);
-        //}
+            activity.ActivityName = newActivity.ActivityName;
+            activity.Description = newActivity.Description;
+            activity.CategoryId = newActivity.CategoryId;
+            activity.Category = newActivity.Category;
+            activity.ActivityDate = newActivity.ActivityDate;
+            activity.Price = newActivity.Price;
+            activity.Capacity = newActivity.Capacity;
+            if (id != newActivity.ActivityId)
+            {
+                return NotFound();
+            }
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Activity.Update(activity);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    throw;
+                }
+            }
+            return RedirectToAction("ActivityList", "Client", new { id = activity.ClientId });
+        }
+        [HttpGet, Route("inactive/{id}")]
+        public async Task<IActionResult> Inactive(long id)
+        {
+            if (id == null)
+            {
+                NotFound();
+            }
 
-        //[HttpDelete, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Delete(long id)
-        //{
-        //    var activity = await _context.Activity.FindAsync(id);
-        //    var clientId = activity.ClientId;
-        //    _context.Activity.Remove(activity);
-        //    await _context.SaveChangesAsync();
+            var activity = await _context.Activity
+                .Include(c => c.Address)
+                .Include(c => c.Category)
+                .Include(c => c.Client)
+                .FirstOrDefaultAsync(m => m.ActivityId.Equals(id));
 
-        //    return RedirectToAction(nameof(Index));
-        //}
+            if (activity == null)
+            {
+                NotFound();
+            }
+            return View(activity);
+        }
+
+        [HttpPost, Route("inactive/{id}")]
+        public async Task<IActionResult> Inactive(long id, bool isActivte = false)
+        {
+            if (id == null)
+            {
+                NotFound();
+            }
+
+            var activity = await _context.Activity
+                .Include(c => c.Address)
+                .Include(c => c.Category)
+                .Include(c => c.Client)
+                .FirstOrDefaultAsync(m => m.ActivityId.Equals(id));
+
+            if (activity == null)
+            {
+                NotFound();
+            }
+
+            activity.IsActive = !activity.IsActive;
+
+            try
+            {
+                _context.Activity.Update(activity);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
+
+            return RedirectToAction("ActivityList", "Client", new { id = activity.ClientId });
+        }
+
     }
 }

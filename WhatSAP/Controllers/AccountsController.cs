@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using WhatSAP.Helpers;
 using WhatSAP.Models;
 using WhatSAP.Models.Account;
 
@@ -68,6 +69,7 @@ namespace WhatSAP.Controllers
                                 HttpContext.Session.SetInt32("token", (int)customer.CustomerId);
                                 HttpContext.Session.SetString("user", customer.FirstName + " " + customer.LastName);
                                 HttpContext.Session.SetString("userType", loginViewModel.UserType);
+                                SessionHelper.SetObjectAsJson(HttpContext.Session, "customer", customer);
                                 return RedirectToAction("Index", "Home");
                             }
                             else
@@ -88,6 +90,7 @@ namespace WhatSAP.Controllers
                                 HttpContext.Session.SetInt32("token", (int)client.ClientId);
                                 HttpContext.Session.SetString("user", client.FirstName + " " + client.LastName);
                                 HttpContext.Session.SetString("userType", loginViewModel.UserType);
+                                SessionHelper.SetObjectAsJson(HttpContext.Session, "client", client);
                                 return RedirectToAction("Index", "Client", new {id = client.ClientId });
                             }
                             else

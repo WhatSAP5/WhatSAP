@@ -11,6 +11,8 @@ using Microsoft.Azure;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.File;
 using Microsoft.WindowsAzure.Storage.Blob;
+using System.Net.Mail;
+using System.Net;
 
 namespace WhatSAP.Controllers
 {
@@ -151,6 +153,17 @@ namespace WhatSAP.Controllers
             booking.Confirmed = true;
             await _context.SaveChangesAsync();
 
+            SmtpClient client = new SmtpClient("mysmtpserver");
+            client.UseDefaultCredentials = false;
+            client.Credentials = new NetworkCredential("username", "password"); //TODO: Change 
+
+            MailMessage mailMessage = new MailMessage();
+            mailMessage.From = new MailAddress("WhatsapAdmin@whatsap.com");
+            mailMessage.To.Add(booking.Customer.Email);
+            mailMessage.Body = "Your booking for " + booking.Activity.ActivityName + " has been approved. Please pay for the activity";
+            mailMessage.Subject = "Booking Confirmation";
+            client.Send(mailMessage);
+
             return RedirectToAction("BookingList", new { id = booking.ClientId });
         }
 
@@ -159,6 +172,17 @@ namespace WhatSAP.Controllers
             var booking = _context.Booking.FirstOrDefault(x => x.BookingId == id);
             _context.Booking.Remove(booking);
             await _context.SaveChangesAsync();
+
+            SmtpClient client = new SmtpClient("mysmtpserver");
+            client.UseDefaultCredentials = false;
+            client.Credentials = new NetworkCredential("username", "password"); //TODO: Change 
+
+            MailMessage mailMessage = new MailMessage();
+            mailMessage.From = new MailAddress("WhatsapAdmin@whatsap.com");
+            mailMessage.To.Add(booking.Customer.Email);
+            mailMessage.Body = "Your booking for " + booking.Activity.ActivityName + " has been rejected.";
+            mailMessage.Subject = "Booking Rejection";
+            client.Send(mailMessage);
 
             return RedirectToAction("BookingList", new { id = booking.ClientId });
         }

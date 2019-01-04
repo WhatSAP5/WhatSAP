@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Index";
+    double average = 0.0;
 }
 
 @*Nav tab Bar*@
@@ -22,16 +23,11 @@
     </li>
 </ul>
 
-@if (User.Identity.IsAuthenticated)
-{
-    <p>
-        <a asp-action="Create">Create New Activity</a>
-    </p>
-}
 
 <div class="row">
     @for (int i = 0; i < Model.Count(); i++)
     {
+        average = 0.0;
         if (i > 0 && i % 3 == 0)
         {
         @:</div><div class="row">
@@ -42,21 +38,63 @@
             <div class="card">
                 <img class="card-img-top" src="~/images/activities/@(Model.ElementAt(i).Key).jpg" alt="@Model.ElementAt(i).ActivityName" style="height:200px" />
                 <div class="card-body" style="height: 250px">
-                    <h5 class="card-title">@Model.ElementAt(i).ActivityName</h5>
+                    <h5 class="card-title">@Model.ElementAt(i).ActivityName&nbsp;</h5>
                     <span class="badge badge-primary">@Model.ElementAt(i).Category</span>
 
                     @if (@Model.ElementAt(i).Description.Count() <= 100)
                     {
-                        <p class="card-text">
-                            @Model.ElementAt(i).Description <br />
-                            Price: $@Model.ElementAt(i).Price per person
-                        </p>
+                    <p class="card-text">
+                        @Model.ElementAt(i).Description <br />
+                        Price: $@Model.ElementAt(i).Price per person<br />
+                        Review:
+
+                            @foreach (Comment c in Model.ElementAt(i).Comment)
+                            {
+                                if (c.Rate == null) { average = 0; }
+                                else
+                                {
+                                    average += (double)c.Rate;
+                                }
+
+                            }
+                            @{
+                                if(average != 0)
+                                {
+                                    average /= Model.ElementAt(i).Comment.Count;
+                                }
+                            }
+                        
+
+
+                        @average / 5.0 <small>(@Model.ElementAt(i).Comment.Count)</small>
+                        <br />
+                    </p>
                     } else
                     {
-                        <p class="card-text">
-                            @Model.ElementAt(i).Description.Substring(0, 100)...  <br />
-                            Price: $@Model.ElementAt(i).Price per person
-                        </p>
+                    <p class="card-text">
+                        @Model.ElementAt(i).Description.Substring(0, 100)...  <br />
+                        Price: $@Model.ElementAt(i).Price per person<br />
+                        Review:
+
+                        @foreach (Comment c in Model.ElementAt(i).Comment)
+                        {
+                            if (c.Rate == null) { average = 0; }
+                            else
+                            {
+                                average += (double)c.Rate;
+                            }
+
+                        }
+                        @{
+                            if (average != 0)
+                            {
+                                average /= Model.ElementAt(i).Comment.Count;
+                            }
+                        }
+
+                        @average / 5.0 <small>(@Model.ElementAt(i).Comment.Count)</small>
+                        <br />
+                    </p>
                     }
 
                     <a class="btn btn-primary" href="@Url.Action("Details", "Activity", new { id = Model.ElementAt(i).ActivityId })">

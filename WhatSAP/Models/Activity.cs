@@ -24,6 +24,7 @@ namespace WhatSAP.Models
         public bool Authorized { get; set; }
         public long? TypeId { get; set; }
         public string RequestFormPath { get; set; }
+        public bool? IsActive { get; set; }
 
         public Address Address { get; set; }
         public Category Category { get; set; }
